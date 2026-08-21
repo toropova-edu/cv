@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CV — Александра-Софья Торопова, морской биолог
+   CV – Александра-Софья Торопова, морской биолог
    Стиль: "научная элегантность у моря" (см. design.md)
    Веб-версия: типографика и отступы в px/rem, рассчитаны на экран, не печать
    ========================================================================== */
@@ -209,7 +209,7 @@ nav.primary-nav a.active {
   background: var(--ocean-blue);
   color: var(--pearl-white);
 }
-/* Пока не решили, откуда «приезжает» подсветка — не рисуем статичный фон,
+/* Пока не решили, откуда «приезжает» подсветка – не рисуем статичный фон,
    чтобы не было вспышки перед стартом анимации (см. main.js) */
 html.nav-pending nav.primary-nav a.active {
   background: none;
@@ -249,8 +249,8 @@ html.nav-pending nav.primary-nav a.active {
   flex-wrap: wrap;
 }
 .hero-photo {
-  width: 240px;
-  height: 240px;
+  width: 272px;
+  height: 272px;
   border-radius: 50%;
   overflow: hidden;
   border: var(--border-thin);
@@ -487,6 +487,29 @@ h2.section-title svg { flex-shrink: 0; width: 22px; height: 22px; }
   color: var(--slate-ink);
 }
 .fact-card p + p { margin-top: 8px; }
+
+/* Личные качества */
+.qualities { max-width: 880px; }
+.quality-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+.quality-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--abyss-navy);
+  background: rgba(142, 211, 242, 0.12);
+  border: 1px solid var(--sky-foam);
+  border-radius: 999px;
+  padding: 10px 20px;
+}
+.quality-chip svg { flex-shrink: 0; width: 17px; height: 17px; }
 
 .tag {
   display: inline-block;
@@ -738,7 +761,7 @@ footer.site-footer p {
   nav.primary-nav { order: 3; flex-basis: 100%; }
   .hero { padding: 56px 0 40px; }
   .hero-inner { flex-direction: column; text-align: center; align-items: center; gap: 32px; }
-  .hero-photo { width: 180px; height: 180px; }
+  .hero-photo { width: 200px; height: 200px; }
   .meta-row, .contact-icons { justify-content: center; }
   h1.name { font-size: 34px; }
   .tagline { max-width: 46ch; }
