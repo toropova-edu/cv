@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <script>document.documentElement.setAttribute('data-lang', localStorage.getItem('site-lang') || 'ru');try{if(sessionStorage.getItem('nav-pill-from'))document.documentElement.classList.add('nav-pending');}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Хобби – Александра-Софья Торопова</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-title-ru="Хобби – Александра-Софья Торопова" data-title-en="Hobbies – Alexandra-Sofia Toropova">
@@ -108,20 +109,8 @@
       </div>
 
       <div class="hobby-card reveal">
-        <div class="hobby-visual">
-          <div class="hobby-visual-icon">
-            <svg width="140" height="140" viewBox="0 0 200 200" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="100" cy="100" r="82" fill="#FBFAF7" stroke="#3889C0" stroke-width="2.2"/>
-              <circle cx="100" cy="100" r="55" fill="none" stroke="#8ED3F2" stroke-width="1" stroke-dasharray="2 5"/>
-              <circle cx="100" cy="100" r="28" fill="none" stroke="#8ED3F2" stroke-width="1" stroke-dasharray="2 5"/>
-              <path d="M78 92 C70 78 88 65 105 68 C122 70 132 85 128 100 C124 115 108 128 90 124 C75 121 68 108 78 92 Z" fill="#3889C0" fill-opacity="0.2" stroke="#3889C0" stroke-width="1.6"/>
-              <path d="M150 40 C158 36 168 42 165 52 C162 60 150 58 146 50 C144 45 146 42 150 40 Z" fill="#3889C0" fill-opacity="0.2" stroke="#3889C0" stroke-width="1.4"/>
-              <path d="M30 55 C22 58 20 70 28 76 C34 80 42 74 40 65 C39 59 35 55 30 55 Z" fill="#3889C0" fill-opacity="0.2" stroke="#3889C0" stroke-width="1.4"/>
-              <path d="M145 148 C152 144 162 148 160 156 C158 163 148 165 143 158 C140 153 141 150 145 148 Z" fill="#3889C0" fill-opacity="0.2" stroke="#3889C0" stroke-width="1.4"/>
-              <circle cx="98" cy="96" r="4.5" fill="#F48423" stroke="none"/>
-              <circle cx="156" cy="48" r="4.5" fill="#F48423" stroke="none"/>
-            </svg>
-          </div>
+        <div class="hobby-photo-wrap">
+          <div id="travel-map" class="hobby-map" role="img" aria-label="Карта с Антарктидой и Кейптауном"></div>
         </div>
         <div class="hobby-card-body">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3889C0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
@@ -146,6 +135,7 @@
   </p>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

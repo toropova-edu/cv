@@ -579,14 +579,14 @@ figure.photo figcaption strong {
   transform: translateY(-3px);
   border-color: var(--ocean-blue);
 }
-.hobby-photo-wrap, .hobby-visual {
+.hobby-photo-wrap {
   position: relative;
   width: 100%;
   padding-top: 100%; /* надёжный способ задать квадрат 1:1 без CSS aspect-ratio */
   flex-shrink: 0;
   overflow: hidden;
 }
-.hobby-photo {
+.hobby-photo, .hobby-map {
   position: absolute;
   top: 0;
   left: 0;
@@ -594,22 +594,16 @@ figure.photo figcaption strong {
   bottom: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1);
 }
+.hobby-photo { object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1); }
 .hobby-card:hover .hobby-photo { transform: scale(1.06); }
-.hobby-visual {
-  background: linear-gradient(135deg, rgba(56, 137, 192, 0.14), rgba(142, 211, 242, 0.28));
+.hobby-map { background: var(--pearl-white); transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1); }
+.hobby-card:hover .hobby-map { transform: scale(1.06); }
+.hobby-map .leaflet-control-attribution {
+  font-size: 9px;
+  background: rgba(251, 250, 247, 0.7);
 }
-.hobby-visual-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: transform 0.4s ease;
-}
-.hobby-card:hover .hobby-visual-icon { transform: translate(-50%, -50%) scale(1.08) rotate(-4deg); }
 .hobby-card-body { padding: 32px 28px 40px; flex: 1; display: flex; flex-direction: column; }
 .hobby-card svg { width: 34px; height: 34px; margin-bottom: 20px; }
 .hobby-card-body svg { margin-left: auto; margin-right: auto; }
