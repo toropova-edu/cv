@@ -560,17 +560,21 @@ figure.photo figcaption strong {
 /* Хобби */
 .hobby-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 28px;
   margin-top: 40px;
 }
 .hobby-card {
   text-align: center;
-  padding: 48px 28px;
   border: 1px solid var(--sky-foam);
   border-radius: var(--radius);
   background: #fff;
+  overflow: hidden;
 }
+.hobby-photo-wrap { width: 100%; height: 200px; }
+.hobby-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hobby-card-body { padding: 32px 28px 40px; }
+.hobby-card-body-full { padding: 48px 28px; }
 .hobby-card svg { width: 34px; height: 34px; margin-bottom: 20px; }
 .hobby-card h3 {
   font-family: var(--serif);
@@ -748,24 +752,6 @@ footer.site-footer p {
   .whale-illustration, .whale-tail { animation: none; }
 }
 
-/* ---------- Покачивание силуэта судна ---------- */
-.ship-illustration {
-  animation: ship-bob 4.5s ease-in-out infinite;
-  transform-origin: 50% 50%;
-}
-.ship-illustration path:last-child {
-  animation: drift-wake 3s linear infinite;
-}
-@keyframes ship-bob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-3px) rotate(0.6deg); }
-}
-@keyframes drift-wake { to { stroke-dashoffset: -16; } }
-
-@media (prefers-reduced-motion: reduce) {
-  .ship-illustration, .ship-illustration path:last-child { animation: none; }
-}
-
 /* Responsive */
 @media (max-width: 900px) {
   :root { --wrap-max: 720px; }
@@ -801,5 +787,4 @@ footer.site-footer p {
   .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
   .js-reveal .reveal .depth-fill { transform: scaleX(1); transition: none; }
   .whale-illustration, .whale-tail { animation: none; }
-  .ship-illustration, .ship-illustration path:last-child { animation: none; }
 }
