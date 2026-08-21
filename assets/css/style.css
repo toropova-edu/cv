@@ -748,6 +748,24 @@ footer.site-footer p {
   .whale-illustration, .whale-tail { animation: none; }
 }
 
+/* ---------- Покачивание силуэта судна ---------- */
+.ship-illustration {
+  animation: ship-bob 4.5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+.ship-illustration path:last-child {
+  animation: drift-wake 3s linear infinite;
+}
+@keyframes ship-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.6deg); }
+}
+@keyframes drift-wake { to { stroke-dashoffset: -16; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ship-illustration, .ship-illustration path:last-child { animation: none; }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   :root { --wrap-max: 720px; }
@@ -783,4 +801,5 @@ footer.site-footer p {
   .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
   .js-reveal .reveal .depth-fill { transform: scaleX(1); transition: none; }
   .whale-illustration, .whale-tail { animation: none; }
+  .ship-illustration, .ship-illustration path:last-child { animation: none; }
 }
