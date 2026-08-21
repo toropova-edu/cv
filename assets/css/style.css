@@ -499,17 +499,17 @@ h2.section-title svg { flex-shrink: 0; width: 22px; height: 22px; }
 .quality-chip {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   font-family: var(--sans);
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--abyss-navy);
   background: rgba(142, 211, 242, 0.12);
   border: 1px solid var(--sky-foam);
   border-radius: 999px;
-  padding: 10px 20px;
+  padding: 8px 16px;
 }
-.quality-chip svg { flex-shrink: 0; width: 17px; height: 17px; }
+.quality-chip svg { flex-shrink: 0; width: 12px; height: 12px; }
 
 .tag {
   display: inline-block;
@@ -744,8 +744,18 @@ footer.site-footer p {
   50% { transform: rotate(6deg); }
 }
 
+/* ---------- Покачивание силуэта судна ---------- */
+.ship-illustration {
+  animation: ship-bob 4.5s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+@keyframes ship-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.6deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .whale-illustration, .whale-tail { animation: none; }
+  .whale-illustration, .whale-tail, .ship-illustration { animation: none; }
 }
 
 /* Responsive */
@@ -782,5 +792,5 @@ footer.site-footer p {
   .badge { border-color: var(--slate-ink); color: var(--slate-ink); }
   .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
   .js-reveal .reveal .depth-fill { transform: scaleX(1); transition: none; }
-  .whale-illustration, .whale-tail { animation: none; }
+  .whale-illustration, .whale-tail, .ship-illustration { animation: none; }
 }
