@@ -177,3 +177,39 @@
 
   window.setTimeout(finish, 900);
 })();
+
+/* ---------- Карта мечты (Leaflet, страница «Хобби») ---------- */
+(function () {
+  'use strict';
+
+  var el = document.getElementById('travel-map');
+  if (!el || typeof window.L === 'undefined') return;
+
+  var map = window.L.map(el, {
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false,
+    boxZoom: false,
+    keyboard: false,
+    attributionControl: true
+  }).setView([-68, 20], 2);
+
+  window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 6,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  var markerStyle = { radius: 6, color: '#F48423', fillColor: '#F48423', fillOpacity: 1, weight: 2 };
+
+  window.L.circleMarker([-33.9249, 18.4241], markerStyle)
+    .addTo(map)
+    .bindTooltip('Кейптаун');
+
+  window.L.circleMarker([-82, 20], markerStyle)
+    .addTo(map)
+    .bindTooltip('Антарктида');
+
+  window.setTimeout(function () { map.invalidateSize(); }, 300);
+})();
