@@ -59,6 +59,14 @@
     return document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'ru';
   }
 
+  function applySwitchableAttr(selector, ruAttr, enAttr, targetAttr, lang) {
+    var el = document.querySelector(selector);
+    if (!el) return;
+    var attr = lang === 'en' ? enAttr : ruAttr;
+    var val = el.getAttribute(attr);
+    if (val) el.setAttribute(targetAttr, val);
+  }
+
   function applyMeta(lang) {
     var titleAttr = lang === 'en' ? 'data-title-en' : 'data-title-ru';
     if (document.body.hasAttribute(titleAttr)) {
@@ -69,8 +77,14 @@
       var val = el.getAttribute(attr);
       if (val) el.setAttribute('alt', val);
     });
+    applySwitchableAttr('meta[name="description"]', 'data-desc-ru', 'data-desc-en', 'content', lang);
+    applySwitchableAttr('meta[property="og:title"]', 'data-og-title-ru', 'data-og-title-en', 'content', lang);
+    applySwitchableAttr('meta[property="og:description"]', 'data-og-desc-ru', 'data-og-desc-en', 'content', lang);
   }
 
+  // На случай, если инлайн-скрипт в <head> ещё не выставил lang (старые кэшированные страницы) —
+  // синхронизируем атрибут lang с сохранённым выбором сразу при загрузке.
+  document.documentElement.setAttribute('lang', currentLang());
   applyMeta(currentLang());
 
   var toggle = document.querySelector('.lang-toggle');
