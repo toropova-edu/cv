@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<script>var _l=localStorage.getItem('site-lang')||'ru';document.documentElement.setAttribute('data-lang',_l);document.documentElement.setAttribute('lang',_l);try{if(sessionStorage.getItem('nav-pill-from'))document.documentElement.classList.add('nav-pending');}catch(e){}</script>
+<script>var _s=localStorage.getItem('site-lang');var _l=_s||((navigator.language||'').toLowerCase().indexOf('ru')===0?'ru':'en');document.documentElement.setAttribute('data-lang',_l);document.documentElement.setAttribute('lang',_l);try{if(sessionStorage.getItem('nav-pill-from'))document.documentElement.classList.add('nav-pending');}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Контакты – Александра-Софья Торопова</title>
 <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 <meta name="description" content="Контакты Александры-Софьи Тороповой: email, Telegram, телефон." data-desc-ru="Контакты Александры-Софьи Тороповой: email, Telegram, телефон." data-desc-en="Contact details for Alexandra-Sofia Toropova: email, Telegram, phone.">
@@ -11,6 +11,9 @@
 <meta property="og:description" content="Контакты Александры-Софьи Тороповой: email, Telegram, телефон." data-og-desc-ru="Контакты Александры-Софьи Тороповой: email, Telegram, телефон." data-og-desc-en="Contact details for Alexandra-Sofia Toropova: email, Telegram, phone.">
 <meta property="og:image" content="assets/images/personal_photo.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Александра-Софья Владимировна Торопова","alternateName":"Alexandra-Sofia Toropova","jobTitle":"Marine Biologist","description":"Морской биолог, специалист по морским млекопитающим","email":"mailto:alexandra.toropova2004@gmail.com","telephone":"+7-919-450-1896","birthDate":"2004-09-15","image":"assets/images/personal_photo.jpg","affiliation":{"@type":"Organization","name":"P.P. Shirshov Institute of Oceanology, Russian Academy of Sciences"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Northern (Arctic) Federal University"},"knowsAbout":["Marine mammals","Beluga whales","Marine biology","Field observation"],"sameAs":["https://t.me/Sasha_Toropova"],"address":{"@type":"PostalAddress","addressLocality":"Perm","addressCountry":"RU"}}
+</script>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-title-ru="Контакты – Александра-Софья Торопова" data-title-en="Contact – Alexandra-Sofia Toropova">
@@ -26,7 +29,7 @@
       <span class="i18n-ru">А-С. Торопова</span><span class="i18n-en">A-S. Toropova</span>
     </a>
     <nav class="primary-nav">
-      <ul>
+      <ul id="primaryNavList">
         <li><a href="index.html"><span class="i18n-ru">Главная</span><span class="i18n-en">Home</span></a></li>
         <li><a href="education.html"><span class="i18n-ru">Образование</span><span class="i18n-en">Education</span></a></li>
         <li><a href="experience.html"><span class="i18n-ru">Опыт и экспедиции</span><span class="i18n-en">Experience &amp; Expeditions</span></a></li>
@@ -34,6 +37,9 @@
         <li><a href="contacts.html" class="active"><span class="i18n-ru">Контакты</span><span class="i18n-en">Contact</span></a></li>
       </ul>
     </nav>
+    <button type="button" class="nav-burger" aria-expanded="false" aria-controls="primaryNavList" aria-label="Открыть меню / Open menu">
+      <span></span><span></span><span></span>
+    </button>
     <button type="button" class="lang-toggle" aria-label="Переключить язык / Switch language">
       <span class="lang-toggle-track">
         <span class="lang-toggle-thumb" aria-hidden="true"></span>
