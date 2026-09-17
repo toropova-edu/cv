@@ -1,299 +1,55 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Опыт и экспедиции — Александра Вербицкая</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        /* Стили специально для карты, чтобы точно работали */
-        .expedition-map-container {
-            position: relative;
-            width: 100%;
-            height: 600px;
-            background: linear-gradient(to bottom, #a8d5e5, #2b6c8f); /* Океан */
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+          <span class="i18n-ru">Стрессоустойчивая</span><span class="i18n-en">Stress-resilient</span>
+        </span>
+        <span class="quality-chip reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M13.4 13.4 L20 20"/></svg>
+          <span class="i18n-ru">Внимательна к деталям</span><span class="i18n-en">Detail-oriented</span>
+        </span>
+        <span class="quality-chip reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"/></svg>
+          <span class="i18n-ru">Ответственная</span><span class="i18n-en">Responsible</span>
+        </span>
+        <span class="quality-chip reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 8.5 L10.5 10.5 L8.5 15.5 L13.5 13.5 Z"/></svg>
+          <span class="i18n-ru">Готова к длительным экспедициям</span><span class="i18n-en">Ready for long expeditions</span>
+        </span>
+      </div>
+    </section>
+  </div>
 
-        .map-silhouettes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+  <div class="wrap">
+    <section class="block competencies">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 v5 l3.5 3.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+        <span class="i18n-ru">Компетенции</span><span class="i18n-en">Competencies</span>
+      </h2>
+      <div class="section-underline">
+        <svg viewBox="0 0 140 8" preserveAspectRatio="none"><path d="M-35,4 C-23,0 -12,8 0,4 C12,0 23,8 35,4 C47,0 58,8 70,4 C82,0 93,8 105,4 C117,0 128,8 140,4 C152,0 163,8 175,4"/></svg>
+      </div>
 
-        .land-mass {
-            fill: #e3d5c1; /* Песочный цвет суши */
-            stroke: #c2b59b;
-            stroke-width: 1;
-            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
-        }
-
-        .map-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .grid-line {
-            stroke: rgba(255, 255, 255, 0.3);
-            stroke-width: 1;
-        }
-
-        .grid-label {
-            fill: rgba(255, 255, 255, 0.6);
-            font-size: 10px;
-            font-family: monospace;
-        }
-
-        .map-markers {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
-
-        .marker-point {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background: #ff6b6b;
-            border: 2px solid white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .marker-point:hover {
-            transform: translate(-50%, -50%) scale(1.3);
-            background: #ff4757;
-            z-index: 100 !important; /* Чтобы точка была выше других при наведении */
-        }
-
-        .marker-point.active {
-            background: #ffa502;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-
-        .marker-tooltip {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.4;
-            width: 220px;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000; /* Самый высокий приоритет */
-            pointer-events: none;
-        }
-
-        .marker-point:hover .marker-tooltip {
-            opacity: 1;
-            visibility: visible;
-            bottom: 30px;
-        }
-
-        .tooltip-title {
-            font-weight: bold;
-            color: #2b6c8f;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .tooltip-desc {
-            font-size: 11px;
-            color: #555;
-        }
-    </style>
-</head>
-<body>
-    <!-- Навигация -->
-    <nav class="chart-rail">
-        <div class="chart-spine"></div>
-        <a href="index.html" class="chart-node">
-            <span class="node-pip"></span>
-            <span class="node-label">Главная</span>
-        </a>
-        <a href="about.html" class="chart-node">
-            <span class="node-pip"></span>
-            <span class="node-label">Обо мне</span>
-        </a>
-        <a href="expeditions.html" class="chart-node active">
-            <span class="node-pip"></span>
-            <span class="node-label">Экспедиции</span>
-        </a>
-        <a href="gallery.html" class="chart-node">
-            <span class="node-pip"></span>
-            <span class="node-label">Галерея</span>
-        </a>
-        <a href="contact.html" class="chart-node">
-            <span class="node-pip"></span>
-            <span class="node-label">Контакты</span>
-        </a>
-    </nav>
-
-    <main class="page-content">
-        <!-- КАРТА ЭКСПЕДИЦИЙ (САМЫЙ ВЕРХ) -->
-        <section class="expedition-map-container">
-            <!-- Силуэты суши (SVG) -->
-            <svg class="map-silhouettes" viewBox="0 0 1000 600" preserveAspectRatio="none">
-                <!-- Скандинавия и Кольский -->
-                <path class="land-mass" d="M 280,50 L 320,60 L 330,100 L 310,140 L 290,130 L 270,100 L 260,60 Z" />
-                <!-- Британские острова (Шотландия) -->
-                <path class="land-mass" d="M 180,120 L 210,110 L 220,150 L 200,180 L 170,160 L 160,130 Z" />
-                <!-- Балтика и Калиниград/Москва -->
-                <path class="land-mass" d="M 300,150 L 350,140 L 380,180 L 360,220 L 320,210 L 300,180 Z" />
-                <!-- Белое море и Архангельск/Соловки -->
-                <path class="land-mass" d="M 350,80 L 400,70 L 420,100 L 380,120 L 340,110 Z" />
-                <!-- Новая Земля -->
-                <path class="land-mass" d="M 450,40 L 480,30 L 490,80 L 470,120 L 440,100 L 430,60 Z" />
-                <!-- Черное море (Анапа) -->
-                <path class="land-mass" d="M 250,250 L 300,240 L 320,280 L 280,300 L 240,280 Z" />
-                <!-- Дальний Восток (Владивосток) -->
-                <path class="land-mass" d="M 850,200 L 900,190 L 920,240 L 880,260 L 840,240 Z" />
-                <!-- Общая масса суши для фона (упрощенно) -->
-                <rect x="0" y="0" width="1000" height="50" fill="#e3d5c1" opacity="0.5"/>
-                <rect x="0" y="550" width="1000" height="50" fill="#e3d5c1" opacity="0.5"/>
-            </svg>
-
-            <!-- Сетка координат -->
-            <svg class="map-grid" viewBox="0 0 1000 600" preserveAspectRatio="none">
-                <!-- Вертикальные линии (долгота) -->
-                <line x1="100" y1="0" x2="100" y2="600" class="grid-line" />
-                <line x1="300" y1="0" x2="300" y2="600" class="grid-line" />
-                <line x1="500" y1="0" x2="500" y2="600" class="grid-line" />
-                <line x1="700" y1="0" x2="700" y2="600" class="grid-line" />
-                <line x1="900" y1="0" x2="900" y2="600" class="grid-line" />
-                <!-- Горизонтальные линии (широта) -->
-                <line x1="0" y1="100" x2="1000" y2="100" class="grid-line" />
-                <line x1="0" y1="200" x2="1000" y2="200" class="grid-line" />
-                <line x1="0" y1="300" x2="1000" y2="300" class="grid-line" />
-                <line x1="0" y1="400" x2="1000" y2="400" class="grid-line" />
-                <line x1="0" y1="500" x2="1000" y2="500" class="grid-line" />
-                
-                <!-- Подписи -->
-                <text x="105" y="20" class="grid-label">20°E</text>
-                <text x="305" y="20" class="grid-label">40°E</text>
-                <text x="505" y="20" class="grid-label">60°E</text>
-                <text x="705" y="20" class="grid-label">80°E</text>
-                <text x="905" y="20" class="grid-label">100°E</text>
-                
-                <text x="10" y="95" class="grid-label">70°N</text>
-                <text x="10" y="195" class="grid-label">60°N</text>
-                <text x="10" y="295" class="grid-label">50°N</text>
-                <text x="10" y="395" class="grid-label">40°N</text>
-            </svg>
-
-            <!-- Маркеры -->
-            <div class="map-markers">
-                <!-- 1. Шотландия (Сент-Эндрюс) -->
-                <div class="marker-point" style="left: 19%; top: 15%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title"> Сент-Эндрюс, Шотландия</span>
-                        <span class="tooltip-desc">Университет (1413). Древнейший в Шотландии. Магистратура по морской биологии.</span>
-                    </div>
-                </div>
-
-                <!-- 2. Калининград -->
-                <div class="marker-point" style="left: 28%; top: 22%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Калининград</span>
-                        <span class="tooltip-desc">Крупнейший порт на Балтике. База Атлантического филиала ВНИРО. Экспедиции на НИС «Келдыш».</span>
-                    </div>
-                </div>
-
-                <!-- 3. Москва -->
-                <div class="marker-point" style="left: 34%; top: 25%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Москва</span>
-                        <span class="tooltip-desc">Институт океанологии РАН (1946). Место работы и научных практик.</span>
-                    </div>
-                </div>
-
-                <!-- 4. Архангельск -->
-                <div class="marker-point" style="left: 38%; top: 12%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Архангельск</span>
-                        <span class="tooltip-desc">САФУ им. Ломоносова. Бакалавриат по морской биологии. Ворота в Арктику.</span>
-                    </div>
-                </div>
-
-                <!-- 5. Соловки -->
-                <div class="marker-point" style="left: 36%; top: 14%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Соловки</span>
-                        <span class="tooltip-desc">Место скопления беломорской белухи. Музей-заповедник. Экспедиция на архипелаг.</span>
-                    </div>
-                </div>
-
-                <!-- 6. Кемь -->
-                <div class="marker-point" style="left: 35%; top: 16%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Кемь</span>
-                        <span class="tooltip-desc">Старинный поморский город. Транзитный порт для экспедиций на Соловки.</span>
-                    </div>
-                </div>
-
-                <!-- 7. Новая Земля -->
-                <div class="marker-point" style="left: 46%; top: 8%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Новая Земля</span>
-                        <span class="tooltip-desc">Арктический архипелаг. Наблюдения 95-го рейса НИС «Келдыш». Суровая природа.</span>
-                    </div>
-                </div>
-
-                <!-- 8. Анапа -->
-                <div class="marker-point" style="left: 29%; top: 45%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Анапа</span>
-                        <span class="tooltip-desc">Учёт черноморских дельфинов с фондом «Природа и Люди». Исследование китообразных.</span>
-                    </div>
-                </div>
-
-                <!-- 9. Владивосток -->
-                <div class="marker-point" style="left: 88%; top: 35%;">
-                    <div class="marker-tooltip">
-                        <span class="tooltip-title">🇷🇺 Владивосток</span>
-                        <span class="tooltip-desc">Крупнейший порт Дальнего Востока. Морской форум. Центр тихоокеанских исследований (ТИНРО).</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Заголовок раздела -->
-        <header class="page-header">
-            <h1>Опыт и экспедиции</h1>
-            <p class="subtitle">География моих исследований: от Белого моря до Тихого океана</p>
-        </header>
-
-        <!-- Остальной контент страницы (если был) -->
-        <section class="content-block">
-            <h2>Научная деятельность</h2>
-            <p>Здесь будет подробное описание экспедиций...</p>
-        </section>
-    </main>
-</body>
-</html>
+      <div class="gauge-grid">
+        <div class="gauge reveal" data-pct="92">
+          <svg viewBox="0 0 100 58" aria-hidden="true">
+            <path class="gauge-track" d="M8,52 A42,42 0 0 1 92,52"/>
+            <path class="gauge-arc" d="M8,52 A42,42 0 0 1 92,52"/>
+          </svg>
+          <div class="gauge-value">92%</div>
+          <div class="gauge-label"><span class="i18n-ru">Полевые наблюдения</span><span class="i18n-en">Field observation</span></div>
+        </div>
+        <div class="gauge reveal" data-pct="80">
+          <svg viewBox="0 0 100 58" aria-hidden="true">
+            <path class="gauge-track" d="M8,52 A42,42 0 0 1 92,52"/>
+            <path class="gauge-arc" d="M8,52 A42,42 0 0 1 92,52"/>
+          </svg>
+          <div class="gauge-value">80%</div>
+          <div class="gauge-label"><span class="i18n-ru">Судовые протоколы</span><span class="i18n-en">Shipboard protocol</span></div>
+        </div>
+        <div class="gauge reveal" data-pct="85">
+          <svg viewBox="0 0 100 58" aria-hidden="true">
+            <path class="gauge-track" d="M8,52 A42,42 0 0 1 92,52"/>
+            <path class="gauge-arc" d="M8,52 A42,42 0 0 1 92,52"/>
+          </svg>
+          <div class="gauge-value">85%</div>
+          <div class="gauge-label"><span class="i18n-ru">Научный перевод EN↔RU</span><span class="i18n-en">Scientific translation EN↔RU</span></div>
+        </div>
+      </div>
+    </section>
