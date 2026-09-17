@@ -1022,48 +1022,95 @@ footer.site-footer p {
 @media (prefers-reduced-motion: reduce) { .chart-rail-marker { transition: none; } }
 
 /* ---------- Карта экспедиций: не береговая линия, а координатная сетка ---------- */
-.expedition-map { margin: 8px 0 40px; }
-.map-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--ocean-blue-text);
-  margin: 0 0 14px;
-}
-.map-eyebrow svg { width: 14px; height: 14px; flex-shrink: 0; }
-.map-frame {
+.expedition-map-section { margin: 0 0 40px; }
+.expedition-map {
   position: relative;
   width: 100%;
-  aspect-ratio: 960 / 300;
-  background: var(--surface);
+  aspect-ratio: 960 / 500;
+  background: linear-gradient(180deg, 
+    rgba(29, 111, 120, 0.08) 0%, 
+    rgba(29, 111, 120, 0.04) 50%, 
+    rgba(29, 111, 120, 0.02) 100%);
   border: 1px solid var(--sky-foam);
   border-radius: var(--radius);
+  overflow: hidden;
 }
-.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
-.map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
-.map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
-.map-grid .coastline { stroke: var(--ocean-blue); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.35; }
-.map-grid .landmass { fill: var(--ocean-blue); transition: opacity 0.2s ease; opacity: 0.15; }
-.map-grid .landmass:hover { opacity: 0.25; }
-
-/* Декоративный фон карты — мягкий градиент "океан" */
-.map-frame::before {
-  content: '';
+.map-ocean {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, 
-    rgba(29, 111, 120, 0.06) 0%, 
-    rgba(29, 111, 120, 0.03) 40%, 
-    rgba(29, 111, 120, 0.02) 100%);
+  background: linear-gradient(135deg, 
+    rgba(29, 111, 120, 0.05) 0%, 
+    rgba(169, 203, 200, 0.08) 50%, 
+    rgba(29, 111, 120, 0.03) 100%);
   pointer-events: none;
   z-index: 0;
 }
-
+.map-silhouettes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.7;
+}
+.map-silhouettes path {
+  fill: #e0f2f1;
+  transition: opacity 0.2s ease;
+}
+.map-silhouettes path:hover {
+  opacity: 0.9;
+}
+.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+.grid-line {
+  position: absolute;
+  background: var(--sky-foam);
+  opacity: 0.5;
+}
+.grid-line.vertical {
+  width: 1px;
+  height: 100%;
+  border-left: 1px dashed var(--sky-foam);
+}
+.grid-line.horizontal {
+  height: 1px;
+  width: 100%;
+  border-top: 1px dashed var(--sky-foam);
+}
+.coord-label {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--fog-grey);
+  letter-spacing: 0.3px;
+}
+.compass-rose {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 2;
+  opacity: 0.6;
+}
+.compass-circle {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--ocean-blue);
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+.compass-north {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--reef-orange);
+}
 .map-marker {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -1077,11 +1124,10 @@ footer.site-footer p {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  z-index: 3;
+  z-index: 10;
 }
-.map-frame::before { z-index: 0; }
-.map-dot {
-  width: 10px; height: 10px;
+.marker-dot {
+  width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--ocean-blue);
   border: 2px solid var(--surface);
@@ -1089,48 +1135,60 @@ footer.site-footer p {
   transition: transform 0.15s ease;
   display: block;
 }
-.map-dot.current { background: var(--reef-orange); box-shadow: 0 0 0 1px var(--reef-orange); }
-.map-marker:hover .map-dot, .map-marker:focus-visible .map-dot { transform: scale(1.35); }
-.map-marker-label {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.2px;
-  color: var(--abyss-navy);
-  white-space: nowrap;
-  background: rgba(var(--pearl-rgb), 0.85);
-  padding: 1px 4px;
-  border-radius: 2px;
+.marker-dot.current {
+  background: var(--reef-orange);
+  box-shadow: 0 0 0 1px var(--reef-orange);
+  animation: pulse-marker 2s ease-in-out infinite;
 }
+.marker-pulse {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--reef-orange);
+  opacity: 0;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-marker {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.map-marker:hover .marker-dot { transform: scale(1.35); }
 .map-tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 12px);
   left: 50%;
   transform: translate(-50%, 4px);
   width: max-content;
-  min-width: 190px;
-  max-width: 230px;
+  min-width: 200px;
+  max-width: 280px;
   background: var(--abyss-navy);
   color: var(--pearl-white);
-  border-radius: 3px;
-  padding: 10px 12px;
+  border-radius: 4px;
+  padding: 12px 14px;
   font-size: 12px;
   line-height: 1.5;
   text-align: left;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: 5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 .map-tooltip b {
   display: block;
   font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.3px;
+  font-size: 11px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   color: var(--sky-foam);
-  margin-bottom: 4px;
-  font-weight: 500;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 .map-tooltip::after {
   content: '';
@@ -1138,36 +1196,17 @@ footer.site-footer p {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border: 6px solid transparent;
+  border: 7px solid transparent;
   border-top-color: var(--abyss-navy);
 }
-.map-marker.edge-left .map-tooltip { left: -6px; transform: translate(0, 4px); }
-.map-marker.edge-left .map-tooltip::after { left: 14px; transform: none; }
-.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip { transform: translate(0, 0); }
-.map-marker.edge-right .map-tooltip { left: auto; right: -6px; transform: translate(0, 4px); }
-.map-marker.edge-right .map-tooltip::after { left: auto; right: 14px; transform: none; }
-.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip { transform: translate(0, 0); }
 .map-marker:hover .map-tooltip,
 .map-marker:focus-visible .map-tooltip {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
 }
-.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip,
-.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip {
-  transform: translate(0, 0);
-}
-.map-caption {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.3px;
-  color: var(--fog-grey);
-  text-align: center;
-  margin: 12px 0 0;
-}
 @media (max-width: 720px) {
-  .map-marker-label { display: none; }
-  .map-tooltip { min-width: 160px; max-width: 190px; font-size: 11px; padding: 8px 10px; }
+  .map-tooltip { min-width: 160px; max-width: 220px; font-size: 11px; padding: 10px 12px; }
 }
 @media print { .expedition-map { display: none; } }
 
