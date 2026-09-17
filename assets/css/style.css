@@ -1035,6 +1035,11 @@ footer.site-footer p {
   border-radius: var(--radius);
   overflow: hidden;
 }
+.map-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 .map-ocean {
   position: absolute;
   inset: 0;
@@ -1052,15 +1057,32 @@ footer.site-footer p {
   height: 100%;
   z-index: 1;
   opacity: 0.7;
+  pointer-events: none;
 }
 .map-silhouettes path {
-  fill: #e0f2f1;
+  fill: #C9DDD9;
+  stroke: var(--ocean-blue);
+  stroke-width: 0.5;
+  opacity: 0.6;
   transition: opacity 0.2s ease;
 }
 .map-silhouettes path:hover {
-  opacity: 0.9;
+  opacity: 0.85;
 }
-.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+.landmass {
+  fill: #D4E5E2;
+  stroke: var(--ocean-blue);
+  stroke-width: 0.8;
+  opacity: 0.75;
+}
+.map-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
 .grid-line {
   position: absolute;
   background: var(--sky-foam);
@@ -1124,7 +1146,7 @@ footer.site-footer p {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  z-index: 10;
+  z-index: 20;
 }
 .marker-dot {
   width: 12px; height: 12px;
@@ -1134,6 +1156,7 @@ footer.site-footer p {
   box-shadow: 0 0 0 1px var(--ocean-blue);
   transition: transform 0.15s ease;
   display: block;
+  pointer-events: none;
 }
 .marker-dot.current {
   background: var(--reef-orange);
@@ -1148,6 +1171,7 @@ footer.site-footer p {
   border: 2px solid var(--reef-orange);
   opacity: 0;
   animation: pulse-ring 2s ease-out infinite;
+  pointer-events: none;
 }
 @keyframes pulse-marker {
   0%, 100% { transform: scale(1); }
@@ -1177,7 +1201,7 @@ footer.site-footer p {
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 100;
+  z-index: 1000;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 .map-tooltip b {
