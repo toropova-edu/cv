@@ -64,6 +64,171 @@
     <p class="lede">Career &amp; Fieldwork</p>
   </div>
 
+  <!-- Карта экспедиций - теперь в самом верху -->
+  <div class="expedition-map">
+    <p class="map-eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 8.5 L10.5 10.5 L8.5 15.5 L13.5 13.5 Z"/></svg>
+      <span class="i18n-ru">География экспедиций</span><span class="i18n-en">Expedition Geography</span>
+    </p>
+    <div class="map-frame" role="img" aria-label="Карта мест экспедиций Александры-Софьи">
+      <!-- Декоративный фон карты с силуэтами береговых линий -->
+      <svg class="map-grid" viewBox="0 0 960 300" preserveAspectRatio="none" aria-hidden="true">
+        <!-- Вертикальные линии долготы -->
+        <line x1="80" y1="0" x2="80" y2="300"/>
+        <line x1="200" y1="0" x2="200" y2="300"/>
+        <line x1="320" y1="0" x2="320" y2="300"/>
+        <line x1="440" y1="0" x2="440" y2="300"/>
+        <line x1="560" y1="0" x2="560" y2="300"/>
+        <line x1="680" y1="0" x2="680" y2="300"/>
+        <line x1="800" y1="0" x2="800" y2="300"/>
+        <line x1="920" y1="0" x2="920" y2="300"/>
+        <!-- Горизонтальные линии широты -->
+        <line x1="0" y1="60" x2="960" y2="60"/>
+        <line x1="0" y1="120" x2="960" y2="120"/>
+        <line x1="0" y1="180" x2="960" y2="180"/>
+        <line x1="0" y1="240" x2="960" y2="240"/>
+        <!-- Подписи координат -->
+        <text x="86" y="18">0°</text>
+        <text x="206" y="18">20°E</text>
+        <text x="326" y="18">40°E</text>
+        <text x="446" y="18">60°E</text>
+        <text x="566" y="18">80°E</text>
+        <text x="686" y="18">100°E</text>
+        <text x="806" y="18">120°E</text>
+        <text x="926" y="18">140°E</text>
+        <text x="8" y="56">70°N</text>
+        <text x="8" y="116">60°N</text>
+        <text x="8" y="176">50°N</text>
+        <text x="8" y="236">40°N</text>
+
+        <!-- Силуэты береговых линий (упрощённые континенты) -->
+        <!-- Европа и Скандинавия -->
+        <path class="landmass" d="M60,40 C70,35 85,30 100,28 C115,26 130,28 140,35 C145,40 148,50 145,60 C142,70 135,80 125,85 C115,90 105,88 95,82 C85,76 75,65 70,55 C65,48 62,45 60,40 Z"/>
+        <!-- Британские острова (Шотландия) -->
+        <path class="landmass" d="M52,55 C58,52 65,50 70,52 C73,55 74,62 72,68 C70,73 65,75 60,73 C55,71 52,65 52,58 C52,56 52,56 52,55 Z"/>
+        <!-- Кольский полуостров и север России -->
+        <path class="landmass" d="M140,25 C160,20 185,18 210,20 C230,22 245,28 250,38 C252,45 248,52 240,56 C230,60 215,58 205,52 C195,46 185,38 175,32 C165,28 155,26 145,26 C142,26 140,25 140,25 Z"/>
+        <!-- Новая Земля -->
+        <path class="landmass" d="M280,15 C290,12 305,10 315,12 C320,15 322,25 320,35 C318,45 312,52 305,55 C298,57 292,52 288,45 C284,35 280,25 280,15 Z"/>
+        <!-- Чёрное море и юг России -->
+        <path class="landmass" d="M120,140 C135,135 155,132 170,135 C180,138 185,145 182,155 C178,165 168,170 155,168 C145,166 135,160 128,152 C122,148 120,143 120,140 Z"/>
+        <!-- Дальний Восток (Владивосток) -->
+        <path class="landmass" d="M720,140 C735,135 755,130 775,128 C790,127 805,130 815,138 C820,145 818,155 810,162 C800,168 785,165 775,158 C765,152 755,148 745,145 C735,143 725,142 720,140 Z"/>
+        <!-- Балтика (Калининград) -->
+        <path class="landmass" d="M95,75 C105,72 118,70 128,73 C133,76 135,82 132,88 C128,93 120,95 112,92 C105,89 98,82 95,75 Z"/>
+        <!-- Архангельск и Белое море -->
+        <path class="landmass" d="M185,45 C200,42 218,40 232,43 C242,46 248,54 245,64 C242,72 232,76 222,73 C212,70 202,62 195,55 C190,50 187,47 185,45 Z"/>
+
+        <!-- Декоративный контур береговой линии (дополнительный) -->
+        <path class="coastline" d="M0,280 C40,275 80,260 120,250 C160,240 200,220 240,210 C280,200 320,195 360,200 C400,205 440,220 480,230 C520,240 560,245 600,240 C640,235 680,220 720,210 C760,200 800,195 840,200 C880,205 920,220 960,230"
+              fill="none" stroke="var(--ocean-blue)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.25"/>
+      </svg>
+
+      <!-- Шотландия (текущее место учёбы) -->
+      <button type="button" class="map-marker edge-left" style="left:4.2%; top:68%;">
+        <span class="map-dot current" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Шотландия</span><span class="i18n-en">Scotland</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Сент-Эндрюс, Шотландия</span><span class="i18n-en">St Andrews, Scotland</span></b>
+          <span class="i18n-ru">Магистратура Marine Mammal Biology, University of St Andrews. Древнейший университет Шотландии (1413), лидер в области морских исследований.</span>
+          <span class="i18n-en">MSc in Marine Mammal Biology, University of St Andrews. Scotland's oldest university (1413), a leader in marine research.</span>
+        </span>
+      </button>
+
+      <!-- Калининград -->
+      <button type="button" class="map-marker" style="left:14.5%; top:52%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Калининград</span><span class="i18n-en">Kaliningrad</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Калининград</span><span class="i18n-en">Kaliningrad</span></b>
+          <span class="i18n-ru">Порт приписки НИС «Академик Мстислав Келдыш». Крупнейший российский порт на Балтике, база многих океанографических экспедиций.</span>
+          <span class="i18n-en">Home port of R/V Akademik Mstislav Keldysh. Russia's largest Baltic Sea port, base for many oceanographic expeditions.</span>
+        </span>
+      </button>
+
+      <!-- Москва (место работы) -->
+      <button type="button" class="map-marker" style="left:24.8%; top:48%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Москва</span><span class="i18n-en">Moscow</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Москва</span><span class="i18n-en">Moscow</span></b>
+          <span class="i18n-ru">Институт океанологии им. П.П. Ширшова РАН — место работы и практик. Ведущий центр морской науки России с 1946 года.</span>
+          <span class="i18n-en">P.P. Shirshov Institute of Oceanology — workplace and internships. Russia's leading marine science centre since 1946.</span>
+        </span>
+      </button>
+
+      <!-- Архангельск (место учёбы) -->
+      <button type="button" class="map-marker" style="left:26.5%; top:36%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Архангельск</span><span class="i18n-en">Arkhangelsk</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Архангельск</span><span class="i18n-en">Arkhangelsk</span></b>
+          <span class="i18n-ru">Северный (Арктический) федеральный университет им. М.В. Ломоносова (САФУ). Бакалавриат по морской биологии. Крупнейший арктический вуз России.</span>
+          <span class="i18n-en">Northern (Arctic) Federal University named after M.V. Lomonosov (SAFU). Bachelor's degree in Marine Biology. Russia's largest Arctic university.</span>
+        </span>
+      </button>
+
+      <!-- Соловки -->
+      <button type="button" class="map-marker" style="left:22.5%; top:32%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Соловки</span><span class="i18n-en">Solovki</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Соловецкий архипелаг</span><span class="i18n-en">Solovetsky Archipelago</span></b>
+          <span class="i18n-ru">Экспедиция: социо-половое поведение белух, 2025. Уникальное место летнего скопления беломорской белухи в Белом море.</span>
+          <span class="i18n-en">Expedition: socio-sexual behaviour of beluga whales, 2025. Unique summer gathering site of White Sea belugas.</span>
+        </span>
+      </button>
+
+      <!-- Кемь -->
+      <button type="button" class="map-marker" style="left:21.8%; top:38%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Кемь</span><span class="i18n-en">Kem'</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Кемь</span><span class="i18n-en">Kem'</span></b>
+          <span class="i18n-ru">Пересадочный порт по пути на Соловки. Старинный поморский город на берегу Белого моря, ворота архипелага.</span>
+          <span class="i18n-en">Transit port on the way to the Solovetsky Islands. Historic Pomor town on the White Sea coast, gateway to the archipelago.</span>
+        </span>
+      </button>
+
+      <!-- Новая Земля -->
+      <button type="button" class="map-marker" style="left:35.5%; top:18%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Новая Земля</span><span class="i18n-en">Novaya Zemlya</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Новая Земля</span><span class="i18n-en">Novaya Zemlya</span></b>
+          <span class="i18n-ru">Наблюдения по маршруту 95-го рейса НИС «Келдыш». Арктический архипелаг между Баренцевым и Карским морями, зона полярных исследований.</span>
+          <span class="i18n-en">Observations along the route of the 95th voyage of R/V Keldysh. Arctic archipelago between the Barents and Kara Seas, polar research zone.</span>
+        </span>
+      </button>
+
+      <!-- Анапа -->
+      <button type="button" class="map-marker" style="left:20.5%; top:78%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Анапа</span><span class="i18n-en">Anapa</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Анапа</span><span class="i18n-en">Anapa</span></b>
+          <span class="i18n-ru">Учёт черноморских дельфинов с фондом «Природа и Люди», 2023. Курортный город на побережье Чёрного моря, место обитания афалины, белобочки и азовки.</span>
+          <span class="i18n-en">Black Sea dolphin survey with Nature and People Foundation, 2023. Resort town on the Black Sea coast, habitat of bottlenose dolphins, common dolphins and harbour porpoises.</span>
+        </span>
+      </button>
+
+      <!-- Владивосток -->
+      <button type="button" class="map-marker edge-right" style="left:88.5%; top:62%;">
+        <span class="map-dot" aria-hidden="true"></span>
+        <span class="map-marker-label"><span class="i18n-ru">Владивосток</span><span class="i18n-en">Vladivostok</span></span>
+        <span class="map-tooltip" role="tooltip">
+          <b><span class="i18n-ru">Владивосток</span><span class="i18n-en">Vladivostok</span></b>
+          <span class="i18n-ru">Морской форум. Крупнейший порт российского Дальнего Востока, центр тихоокеанских морских исследований и международного сотрудничества.</span>
+          <span class="i18n-en">Maritime forum. Russia's largest Far East port, centre for Pacific marine research and international cooperation.</span>
+        </span>
+      </button>
+    </div>
+    <p class="map-caption">
+      <span class="i18n-ru">Наведите курсор или коснитесь точки, чтобы узнать, что там происходило</span>
+      <span class="i18n-en">Hover or tap a point to see what happened there</span>
+    </p>
+  </div>
+
   <div class="wrap">
     <div class="wave-divider small">
       <svg viewBox="0 0 300 20" preserveAspectRatio="none">
@@ -187,107 +352,6 @@
             <p class="i18n-en">Cape Beluzhy on the western shore of Bolshoy Solovetsky Island is a summer gathering site for the White Sea beluga, the smallest beluga population in Russia (body length about 3.1 m; the Solovetsky herd numbers roughly 80 individuals). The Marine Mammal Laboratory of the P.P. Shirshov Institute of Oceanology, Russian Academy of Sciences, runs the “Beluga – White Whale” programme here, studying the species' biology, social structure, and acoustics. The archipelago and its adjacent waters form part of the protected territory of the Solovetsky State Museum-Reserve.</p>
           </div>
         </div>
-      </div>
-
-      <div class="expedition-map">
-        <p class="map-eyebrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 8.5 L10.5 10.5 L8.5 15.5 L13.5 13.5 Z"/></svg>
-          <span class="i18n-ru">География экспедиций</span><span class="i18n-en">Expedition Geography</span>
-        </p>
-        <div class="map-frame">
-          <svg class="map-grid" viewBox="0 0 960 260" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="64" y1="0" x2="64" y2="260"/>
-            <line x1="256" y1="0" x2="256" y2="260"/>
-            <line x1="448" y1="0" x2="448" y2="260"/>
-            <line x1="640" y1="0" x2="640" y2="260"/>
-            <line x1="832" y1="0" x2="832" y2="260"/>
-            <line x1="0" y1="191.6" x2="960" y2="191.6"/>
-            <line x1="0" y1="123.2" x2="960" y2="123.2"/>
-            <line x1="0" y1="54.7" x2="960" y2="54.7"/>
-            <text x="70" y="15">0°</text>
-            <text x="262" y="15">30°E</text>
-            <text x="454" y="15">60°E</text>
-            <text x="646" y="15">90°E</text>
-            <text x="838" y="15">120°E</text>
-            <text x="6" y="188">50°N</text>
-            <text x="6" y="119.5">60°N</text>
-            <text x="6" y="51">70°N</text>
-          </svg>
-
-          <button type="button" class="map-marker edge-left" style="left:4.8%; top:57.0%;">
-            <span class="map-dot current" aria-hidden="true"></span>
-            <span class="map-marker-label">St Andrews</span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Сент-Эндрюс, Шотландия</span><span class="i18n-en">St Andrews, Scotland</span></b>
-              <span class="i18n-ru">Сейчас: магистратура Marine Mammal Biology, University of St Andrews.</span>
-              <span class="i18n-en">Now: MSc in Marine Mammal Biology, University of St Andrews.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker" style="left:20.3%; top:61.3%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Калининград</span><span class="i18n-en">Kaliningrad</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Калининград</span><span class="i18n-en">Kaliningrad</span></b>
-              <span class="i18n-ru">Порт приписки НИС «Академик Мстислав Келдыш».</span>
-              <span class="i18n-en">Home port of R/V Akademik Mstislav Keldysh.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker" style="left:41.7%; top:17.1%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Новая Земля</span><span class="i18n-en">Novaya Zemlya</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Новая Земля</span><span class="i18n-en">Novaya Zemlya</span></b>
-              <span class="i18n-ru">Наблюдения по маршруту 95-го рейса.</span>
-              <span class="i18n-en">Observations along the route of the 95th voyage.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker" style="left:30.5%; top:34.1%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Соловки</span><span class="i18n-en">Solovki</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Соловецкий архипелаг</span><span class="i18n-en">Solovetsky Archipelago</span></b>
-              <span class="i18n-ru">Экспедиция: социо-половое поведение белух, 2025.</span>
-              <span class="i18n-en">Expedition: socio-sexual behaviour of beluga whales, 2025.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker" style="left:26.8%; top:43.0%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Кемь</span><span class="i18n-en">Kem'</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Кемь</span><span class="i18n-en">Kem'</span></b>
-              <span class="i18n-ru">Пересадочный порт по пути на Соловки.</span>
-              <span class="i18n-en">Transit port on the way to the Solovetsky Islands.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker" style="left:31.5%; top:87.2%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Анапа</span><span class="i18n-en">Anapa</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Анапа</span><span class="i18n-en">Anapa</span></b>
-              <span class="i18n-ru">Учёт черноморских дельфинов с фондом «Природа и Люди», 2023.</span>
-              <span class="i18n-en">Black Sea dolphin survey with the Nature and People Foundation, 2023.</span>
-            </span>
-          </button>
-
-          <button type="button" class="map-marker edge-right" style="left:94.6%; top:91.8%;">
-            <span class="map-dot" aria-hidden="true"></span>
-            <span class="map-marker-label"><span class="i18n-ru">Владивосток</span><span class="i18n-en">Vladivostok</span></span>
-            <span class="map-tooltip" role="tooltip">
-              <b><span class="i18n-ru">Владивосток</span><span class="i18n-en">Vladivostok</span></b>
-              <span class="i18n-ru">Морской форум.</span>
-              <span class="i18n-en">Maritime forum.</span>
-            </span>
-          </button>
-        </div>
-        <p class="map-caption">
-          <span class="i18n-ru">Наведите курсор или коснитесь точки, чтобы узнать, что там происходило</span>
-          <span class="i18n-en">Hover or tap a point to see what happened there</span>
-        </p>
       </div>
 
       <div class="gallery" id="gallery">
