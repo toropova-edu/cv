@@ -1022,7 +1022,7 @@ footer.site-footer p {
 @media (prefers-reduced-motion: reduce) { .chart-rail-marker { transition: none; } }
 
 /* ---------- Карта экспедиций: не береговая линия, а координатная сетка ---------- */
-.expedition-map { margin: 40px 0 8px; }
+.expedition-map { margin: 8px 0 40px; }
 .map-eyebrow {
   display: flex;
   align-items: center;
@@ -1044,9 +1044,25 @@ footer.site-footer p {
   border: 1px solid var(--sky-foam);
   border-radius: var(--radius);
 }
-.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 .map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
 .map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
+.map-grid .coastline { stroke: var(--ocean-blue); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.35; }
+.map-grid .landmass { fill: var(--ocean-blue); transition: opacity 0.2s ease; opacity: 0.15; }
+.map-grid .landmass:hover { opacity: 0.25; }
+
+/* Декоративный фон карты — мягкий градиент "океан" */
+.map-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, 
+    rgba(29, 111, 120, 0.06) 0%, 
+    rgba(29, 111, 120, 0.03) 40%, 
+    rgba(29, 111, 120, 0.02) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
 
 .map-marker {
   position: absolute;
@@ -1061,8 +1077,9 @@ footer.site-footer p {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  z-index: 2;
+  z-index: 3;
 }
+.map-frame::before { z-index: 0; }
 .map-dot {
   width: 10px; height: 10px;
   border-radius: 50%;
