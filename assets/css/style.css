@@ -1021,6 +1021,139 @@ footer.site-footer p {
 @media (max-width: 1180px) { .chart-rail { display: none; } }
 @media (prefers-reduced-motion: reduce) { .chart-rail-marker { transition: none; } }
 
+/* ---------- Карта экспедиций: не береговая линия, а координатная сетка ---------- */
+.expedition-map { margin: 40px 0 8px; }
+.map-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ocean-blue-text);
+  margin: 0 0 14px;
+}
+.map-eyebrow svg { width: 14px; height: 14px; flex-shrink: 0; }
+.map-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 960 / 300;
+  background: var(--surface);
+  border: 1px solid var(--sky-foam);
+  border-radius: var(--radius);
+}
+.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
+.map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
+
+.map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 6px;
+  margin: -6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+.map-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--ocean-blue);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--ocean-blue);
+  transition: transform 0.15s ease;
+  display: block;
+}
+.map-dot.current { background: var(--reef-orange); box-shadow: 0 0 0 1px var(--reef-orange); }
+.map-marker:hover .map-dot, .map-marker:focus-visible .map-dot { transform: scale(1.35); }
+.map-marker-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2px;
+  color: var(--abyss-navy);
+  white-space: nowrap;
+  background: rgba(var(--pearl-rgb), 0.85);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.map-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  width: max-content;
+  min-width: 190px;
+  max-width: 230px;
+  background: var(--abyss-navy);
+  color: var(--pearl-white);
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+.map-tooltip b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--sky-foam);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.map-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--abyss-navy);
+}
+.map-marker.edge-left .map-tooltip { left: -6px; transform: translate(0, 4px); }
+.map-marker.edge-left .map-tooltip::after { left: 14px; transform: none; }
+.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip { transform: translate(0, 0); }
+.map-marker.edge-right .map-tooltip { left: auto; right: -6px; transform: translate(0, 4px); }
+.map-marker.edge-right .map-tooltip::after { left: auto; right: 14px; transform: none; }
+.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip { transform: translate(0, 0); }
+.map-marker:hover .map-tooltip,
+.map-marker:focus-visible .map-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip,
+.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip {
+  transform: translate(0, 0);
+}
+.map-caption {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  color: var(--fog-grey);
+  text-align: center;
+  margin: 12px 0 0;
+}
+@media (max-width: 720px) {
+  .map-marker-label { display: none; }
+  .map-tooltip { min-width: 160px; max-width: 190px; font-size: 11px; padding: 8px 10px; }
+}
+@media print { .expedition-map { display: none; } }
+
 /* ---------- Спектрограмма контакт-крика белухи (акцент раздела «Опыт») ---------- */
 .spectrogram-illustration { color: var(--ocean-blue); }
 .spectrogram-caption {
