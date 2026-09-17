@@ -1044,7 +1044,7 @@ footer.site-footer p {
   border: 1px solid var(--sky-foam);
   border-radius: var(--radius);
 }
-.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 .map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
 .map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
 .map-grid .coastline { stroke: var(--ocean-blue); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.35; }
@@ -1079,7 +1079,6 @@ footer.site-footer p {
   gap: 4px;
   z-index: 3;
 }
-.map-grid { z-index: 1; }
 .map-frame::before { z-index: 0; }
 .map-dot {
   width: 10px; height: 10px;
