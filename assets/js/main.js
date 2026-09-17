@@ -191,3 +191,95 @@
 
   window.setTimeout(finish, 900);
 })();
+
+/* ---------- Мобильное меню (бургер) ---------- */
+(function () {
+  'use strict';
+
+  document.documentElement.classList.add('js-nav');
+
+  var burger = document.querySelector('.nav-burger');
+  var nav = document.querySelector('nav.primary-nav');
+  if (!burger || !nav) return;
+
+  function isOpen() { return burger.getAttribute('aria-expanded') === 'true'; }
+
+  function setOpen(open) {
+    burger.setAttribute('aria-expanded', String(open));
+    nav.classList.toggle('nav-open', open);
+  }
+
+  burger.addEventListener('click', function () { setOpen(!isOpen()); });
+
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setOpen(false); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) {
+      setOpen(false);
+      burger.focus();
+    }
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 720 && isOpen()) setOpen(false);
+  });
+})();
+
+/* ---------- Кнопка «Сохранить как PDF» (печать текущей страницы) ---------- */
+(function () {
+  'use strict';
+  var btn = document.getElementById('printBtn');
+  if (!btn) return;
+  btn.addEventListener('click', function () { window.print(); });
+})();
+
+/* ---------- Глубиномер-навигация по разделам «Опыта» ---------- */
+(function () {
+  'use strict';
+
+  var rail = document.querySelector('.chart-rail');
+  if (!rail) return;
+
+  var marker = rail.querySelector('.chart-rail-marker');
+  var stops = Array.prototype.slice.call(rail.querySelectorAll('.chart-rail-stop'));
+  var targets = stops.map(function (a) {
+    var href = a.getAttribute('href') || '';
+    return href.charAt(0) === '#' ? document.querySelector(href) : null;
+  });
+
+  function update() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var pct = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
+    if (marker) marker.style.top = pct + '%';
+
+    var currentIndex = 0;
+    targets.forEach(function (el, i) {
+      if (el && el.getBoundingClientRect().top - 140 <= 0) currentIndex = i;
+    });
+    stops.forEach(function (a, i) { a.classList.toggle('current', i === currentIndex); });
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () { update(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+})();
+
+/* ---------- Приборный кластер компетенций: целевые значения дуг ---------- */
+(function () {
+  'use strict';
+  var CIRC = 132;
+  document.querySelectorAll('.gauge[data-pct]').forEach(function (g) {
+    var pct = parseFloat(g.getAttribute('data-pct')) || 0;
+    var arc = g.querySelector('.gauge-arc');
+    if (!arc) return;
+    arc.style.setProperty('--target-offset', CIRC - (CIRC * pct / 100));
+  });
+})();

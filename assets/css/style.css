@@ -224,6 +224,34 @@ header.site-header {
 
 nav.primary-nav { order: 2; }
 
+/* ---------- Бургер мобильного меню ---------- */
+.nav-burger {
+  display: none;
+  order: 2;
+  appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--sky-foam);
+  border-radius: 3px;
+  width: 38px;
+  height: 34px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-burger span {
+  width: 18px;
+  height: 1.6px;
+  background: var(--abyss-navy);
+  display: block;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.6px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.6px) rotate(-45deg); }
+
 /* ---------- Переключатель языка: качелька RU / EN ---------- */
 .lang-toggle {
   order: 3;
@@ -444,6 +472,26 @@ h1.name {
 .contact-icons a:hover { color: var(--ocean-blue-text); }
 .contact-icons svg { flex-shrink: 0; }
 
+.print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--ocean-blue-text);
+  border: 1px solid var(--ocean-blue-text);
+  border-radius: 999px;
+  padding: 9px 18px;
+  background: none;
+  cursor: pointer;
+  margin-top: 28px;
+}
+.print-btn:hover { background: var(--tint-teal); }
+.print-btn svg { flex-shrink: 0; }
+
 /* ---------- Секции / контент страниц ---------- */
 main { position: relative; padding: 8px 0 100px; }
 
@@ -471,6 +519,7 @@ main { position: relative; padding: 8px 0 100px; }
 section.block {
   margin: var(--gap-section) 0;
 }
+#work, #expeditions, #gallery { scroll-margin-top: 90px; }
 
 h2.section-title {
   font-family: var(--serif);
@@ -612,6 +661,39 @@ h2.section-title svg { flex-shrink: 0; width: 22px; height: 22px; }
   padding: 8px 16px;
 }
 .quality-chip svg { flex-shrink: 0; width: 12px; height: 12px; color: var(--ocean-blue); }
+
+/* Компетенции: приборный кластер вместо шкалы-полоски */
+.competencies { max-width: 780px; }
+.gauge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 12px;
+}
+.gauge { text-align: center; }
+.gauge svg { width: 100%; height: auto; }
+.gauge-track { fill: none; stroke: var(--tint-teal-strong); stroke-width: 7; stroke-linecap: round; }
+.gauge-arc {
+  fill: none;
+  stroke: var(--ocean-blue);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 132;
+  stroke-dashoffset: var(--target-offset, 132);
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+.js-reveal .reveal .gauge-arc { stroke-dashoffset: 132; }
+.js-reveal .reveal.is-visible .gauge-arc { stroke-dashoffset: var(--target-offset, 132); }
+.gauge-value { font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--abyss-navy); margin-top: 2px; }
+.gauge-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: var(--fog-grey);
+  margin-top: 4px;
+  line-height: 1.4;
+}
 
 .tag {
   display: inline-block;
@@ -886,6 +968,192 @@ footer.site-footer p {
   50% { transform: rotate(6deg); }
 }
 
+/* ---------- Глубиномер-навигация по разделам «Опыта» ---------- */
+.chart-rail {
+  position: fixed;
+  top: 50%;
+  right: 22px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 54vh;
+  max-height: 480px;
+  z-index: 20;
+}
+.chart-rail-line {
+  position: absolute;
+  top: 0; bottom: 0; right: 8px;
+  width: 1px;
+  background: var(--sky-foam);
+}
+.chart-rail-marker {
+  position: absolute;
+  right: 4px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--reef-orange);
+  transform: translate(50%, -50%);
+  box-shadow: 0 0 0 3px var(--pearl-white);
+  transition: top 0.08s linear;
+  pointer-events: none;
+}
+.chart-rail-stop {
+  position: absolute;
+  right: 18px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  color: var(--fog-grey);
+  white-space: nowrap;
+  text-decoration: none;
+  text-align: right;
+  padding: 3px 0;
+}
+.chart-rail-stop:hover, .chart-rail-stop.current { color: var(--ocean-blue-text); }
+.chart-rail-stop::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  width: 5px; height: 1px;
+  background: var(--sky-foam);
+}
+@media (max-width: 1180px) { .chart-rail { display: none; } }
+@media (prefers-reduced-motion: reduce) { .chart-rail-marker { transition: none; } }
+
+/* ---------- Карта экспедиций: не береговая линия, а координатная сетка ---------- */
+.expedition-map { margin: 40px 0 8px; }
+.map-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ocean-blue-text);
+  margin: 0 0 14px;
+}
+.map-eyebrow svg { width: 14px; height: 14px; flex-shrink: 0; }
+.map-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 960 / 300;
+  background: var(--surface);
+  border: 1px solid var(--sky-foam);
+  border-radius: var(--radius);
+}
+.map-grid { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
+.map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
+
+.map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 6px;
+  margin: -6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+.map-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--ocean-blue);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--ocean-blue);
+  transition: transform 0.15s ease;
+  display: block;
+}
+.map-dot.current { background: var(--reef-orange); box-shadow: 0 0 0 1px var(--reef-orange); }
+.map-marker:hover .map-dot, .map-marker:focus-visible .map-dot { transform: scale(1.35); }
+.map-marker-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2px;
+  color: var(--abyss-navy);
+  white-space: nowrap;
+  background: rgba(var(--pearl-rgb), 0.85);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.map-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  width: max-content;
+  min-width: 190px;
+  max-width: 230px;
+  background: var(--abyss-navy);
+  color: var(--pearl-white);
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+.map-tooltip b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--sky-foam);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.map-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--abyss-navy);
+}
+.map-marker.edge-left .map-tooltip { left: -6px; transform: translate(0, 4px); }
+.map-marker.edge-left .map-tooltip::after { left: 14px; transform: none; }
+.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip { transform: translate(0, 0); }
+.map-marker.edge-right .map-tooltip { left: auto; right: -6px; transform: translate(0, 4px); }
+.map-marker.edge-right .map-tooltip::after { left: auto; right: 14px; transform: none; }
+.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip { transform: translate(0, 0); }
+.map-marker:hover .map-tooltip,
+.map-marker:focus-visible .map-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.map-marker.edge-left:hover .map-tooltip, .map-marker.edge-left:focus-visible .map-tooltip,
+.map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip {
+  transform: translate(0, 0);
+}
+.map-caption {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  color: var(--fog-grey);
+  text-align: center;
+  margin: 12px 0 0;
+}
+@media (max-width: 720px) {
+  .map-marker-label { display: none; }
+  .map-tooltip { min-width: 160px; max-width: 190px; font-size: 11px; padding: 8px 10px; }
+}
+@media print { .expedition-map { display: none; } }
+
 /* ---------- Спектрограмма контакт-крика белухи (акцент раздела «Опыт») ---------- */
 .spectrogram-illustration { color: var(--ocean-blue); }
 .spectrogram-caption {
@@ -909,8 +1177,17 @@ footer.site-footer p {
 @media (max-width: 720px) {
   .wrap { padding: 0 24px; }
   .nav-inner { padding: 16px 24px; }
-  .lang-toggle { order: 2; }
-  nav.primary-nav { order: 3; flex-basis: 100%; }
+  .nav-burger { display: flex; }
+  .lang-toggle { order: 3; }
+  html.js-nav nav.primary-nav {
+    order: 4;
+    flex-basis: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.16, 0.84, 0.44, 1);
+  }
+  html.js-nav nav.primary-nav.nav-open { max-height: 320px; }
+  html:not(.js-nav) nav.primary-nav { order: 4; flex-basis: 100%; }
   .hero { padding: 56px 0 40px; }
   .hero-inner { flex-direction: column; text-align: center; align-items: center; gap: 32px; }
   .hero-photo { width: 200px; height: 200px; }
@@ -925,15 +1202,36 @@ footer.site-footer p {
   .timeline-date { width: 78px; font-size: 11.5px; }
   .timeline-item:not(:last-child)::before { left: 92px; }
   .timeline-date::after { right: -19px; }
-  nav.primary-nav ul { justify-content: center; gap: 4px; }
-  nav.primary-nav a { padding: 8px 12px; font-size: 10.5px; }
+  nav.primary-nav ul { flex-direction: column; gap: 2px; padding-top: 10px; }
+  nav.primary-nav a { padding: 12px 14px; font-size: 12px; display: block; text-align: center; }
   section.block { margin: 40px 0; }
+  .chart-rail { display: none; }
 }
 
 @media print {
-  header.site-header { position: static; }
+  :root {
+    --abyss-navy: #10222E; --slate-ink: #1B303C; --ocean-blue: #1D6F78;
+    --ocean-blue-text: #0B3B44; --sky-foam: #A9CBC8; --pearl-white: #FFFFFF; --pearl-rgb: 255, 255, 255;
+    --surface: #FFFFFF; --fog-grey: #444C4E; --kelp-green: #3E4C33; --reef-orange: #8C6420;
+    --tint-teal: rgba(29, 111, 120, 0.05); --tint-teal-strong: rgba(29, 111, 120, 0.09);
+  }
+  body { font-size: 12.5px; }
+  header.site-header { position: static; border-bottom: 1px solid var(--sky-foam); }
+  .lang-toggle, .nav-burger, nav.primary-nav, .print-btn,
+  .bathymetry-bg, .hero-frame, .whale-illustration,
+  .wave-divider, .spectrogram-illustration, .spectrogram-caption,
+  .chart-rail, .gallery { display: none !important; }
+  .hero { padding: 0 0 20px; overflow: visible; }
+  .hero-photo { width: 110px; height: 110px; }
+  h1.name { font-size: 30px; }
+  main { padding: 0; }
+  .wrap { padding: 0; max-width: 100%; }
+  section.block { margin: 18px 0; break-inside: avoid; }
+  .timeline-item, .fact-card, .hobby-card, .contact-card { break-inside: avoid; }
+  a { text-decoration: none; }
   .badge { border-color: var(--slate-ink); color: var(--slate-ink); }
   .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
   .js-reveal .reveal .depth-fill { transform: scaleX(1); transition: none; }
+  .js-reveal .reveal .gauge-arc { stroke-dashoffset: var(--target-offset, 132); transition: none; }
   .whale-illustration, .whale-tail { animation: none; }
 }
