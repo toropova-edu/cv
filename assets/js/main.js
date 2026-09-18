@@ -49,7 +49,6 @@
     applyParallax();
   }
 })();
-
 (function () {
   'use strict';
 
@@ -227,14 +226,6 @@
   });
 })();
 
-/* ---------- Кнопка «Сохранить как PDF» (печать текущей страницы) ---------- */
-(function () {
-  'use strict';
-  var btn = document.getElementById('printBtn');
-  if (!btn) return;
-  btn.addEventListener('click', function () { window.print(); });
-})();
-
 /* ---------- Глубиномер-навигация по разделам «Опыта» ---------- */
 (function () {
   'use strict';
@@ -270,16 +261,4 @@
     }
   }, { passive: true });
   update();
-})();
-
-/* ---------- Приборный кластер компетенций: целевые значения дуг ---------- */
-(function () {
-  'use strict';
-  var CIRC = 132;
-  document.querySelectorAll('.gauge[data-pct]').forEach(function (g) {
-    var pct = parseFloat(g.getAttribute('data-pct')) || 0;
-    var arc = g.querySelector('.gauge-arc');
-    if (!arc) return;
-    arc.style.setProperty('--target-offset', CIRC - (CIRC * pct / 100));
-  });
 })();
