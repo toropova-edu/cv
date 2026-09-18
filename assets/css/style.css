@@ -1026,7 +1026,7 @@ footer.site-footer p {
 .expedition-map {
   position: relative;
   width: 100%;
-  aspect-ratio: 960 / 500;
+  aspect-ratio: 960 / 234;
   background: linear-gradient(180deg, 
     rgba(29, 111, 120, 0.08) 0%, 
     rgba(29, 111, 120, 0.04) 50%, 
@@ -1084,7 +1084,16 @@ footer.site-footer p {
   pointer-events: none;
 }
 .map-grid line { stroke: var(--sky-foam); stroke-width: 1; stroke-dasharray: 3 4; }
-.map-grid text { font-family: var(--mono); font-size: 9px; fill: var(--fog-grey); }
+.map-grid text {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2px;
+  fill: var(--ocean-blue-text);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
 .grid-line {
   position: absolute;
   background: var(--sky-foam);
@@ -1177,6 +1186,10 @@ footer.site-footer p {
   background: var(--reef-orange);
   box-shadow: 0 0 0 1px var(--reef-orange);
   animation: pulse-marker 2s ease-in-out infinite;
+}
+.map-dot.home, .marker-dot.home {
+  background: var(--kelp-green);
+  box-shadow: 0 0 0 1px var(--kelp-green);
 }
 .map-marker-label {
   font-family: var(--mono);
