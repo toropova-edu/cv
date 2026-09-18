@@ -1188,6 +1188,10 @@ footer.site-footer p {
   padding: 1px 4px;
   border-radius: 2px;
 }
+/* Разводим подписи трёх близко расположенных беломорских точек (Кемь, Соловки, Архангельск) */
+.map-marker-label.label-nudge-right { transform: translate(20px, -4px); }
+.map-marker-label.label-nudge-up { transform: translate(-4px, -16px); }
+.map-marker-label.label-nudge-down { transform: translate(-8px, 10px); }
 .marker-pulse {
   position: absolute;
   width: 20px;
