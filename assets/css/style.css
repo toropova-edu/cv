@@ -1160,16 +1160,17 @@ footer.site-footer p {
 .map-marker {
   position: absolute;
   transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
   appearance: none;
   background: none;
   border: none;
-  padding: 6px;
-  margin: -6px;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
   z-index: 20;
 }
 .map-dot, .marker-dot {
@@ -1192,6 +1193,10 @@ footer.site-footer p {
   box-shadow: 0 0 0 1px var(--kelp-green);
 }
 .map-marker-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 4px);
   font-family: var(--mono);
   font-size: 9.5px;
   letter-spacing: 0.2px;
@@ -1200,11 +1205,13 @@ footer.site-footer p {
   background: rgba(var(--pearl-rgb), 0.85);
   padding: 1px 4px;
   border-radius: 2px;
+  pointer-events: none;
 }
-/* Разводим подписи трёх близко расположенных беломорских точек (Кемь, Соловки, Архангельск) */
-.map-marker-label.label-nudge-right { transform: translate(20px, -4px); }
-.map-marker-label.label-nudge-up { transform: translate(-4px, -16px); }
-.map-marker-label.label-nudge-down { transform: translate(-8px, 10px); }
+/* Разводим подписи трёх близко расположенных беломорских точек (Кемь, Соловки, Архангельск) —
+   сами точки лежат почти вплотную, поэтому подписи оттягиваем в разные стороны */
+.map-marker-label.label-nudge-right { transform: translate(calc(-50% + 26px), -13px); }
+.map-marker-label.label-nudge-up { transform: translate(calc(-50% - 4px), -22px); }
+.map-marker-label.label-nudge-down { transform: translate(calc(-50% - 6px), 12px); }
 .marker-pulse {
   position: absolute;
   width: 20px;
@@ -1223,7 +1230,7 @@ footer.site-footer p {
   0% { transform: scale(0.5); opacity: 0.8; }
   100% { transform: scale(1.5); opacity: 0; }
 }
-.map-marker:hover .marker-dot { transform: scale(1.35); }
+.map-marker:hover .map-dot, .map-marker:hover .marker-dot { transform: scale(1.35); }
 .map-tooltip {
   position: absolute;
   bottom: calc(100% + 12px);
