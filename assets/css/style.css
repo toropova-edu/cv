@@ -1033,12 +1033,18 @@ footer.site-footer p {
     rgba(29, 111, 120, 0.02) 100%);
   border: 1px solid var(--sky-foam);
   border-radius: var(--radius);
-  overflow: hidden;
 }
 .map-frame {
   position: relative;
   width: 100%;
   height: 100%;
+}
+.map-graphics {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 0;
 }
 .map-ocean {
   position: absolute;
