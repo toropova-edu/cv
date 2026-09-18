@@ -1245,31 +1245,46 @@ footer.site-footer p {
   bottom: calc(100% + 12px);
   left: 50%;
   transform: translate(-50%, 4px);
-  width: max-content;
-  min-width: 200px;
-  max-width: 280px;
-  background: var(--abyss-navy);
-  color: var(--pearl-white);
-  border-radius: 4px;
-  padding: 12px 14px;
-  font-size: 12px;
-  line-height: 1.5;
+  width: 292px;
+  background: var(--surface);
+  color: var(--slate-ink);
+  border: 1px solid var(--sky-foam);
+  border-top: 3px solid var(--ocean-blue);
+  border-radius: 3px;
+  padding: 14px 16px 15px;
+  font-size: 12.5px;
+  line-height: 1.55;
   text-align: left;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 24px rgba(16, 34, 46, 0.16);
+}
+.map-tooltip-photo {
+  display: block;
+  max-width: none;
+  width: calc(100% + 32px);
+  height: 112px;
+  margin: -14px -16px 13px;
+  object-fit: cover;
+  object-position: center center;
+  border-bottom: 1px solid var(--sky-foam);
+}
+.map-tooltip-photo.photo-emblem {
+  object-fit: contain;
+  background: #fff;
+  padding: 8px 20px;
 }
 .map-tooltip b {
   display: block;
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.4px;
+  font-size: 10.5px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
-  color: var(--sky-foam);
-  margin-bottom: 6px;
+  color: var(--ocean-blue-text);
+  margin-bottom: 8px;
   font-weight: 600;
 }
 .map-tooltip::after {
@@ -1279,7 +1294,7 @@ footer.site-footer p {
   left: 50%;
   transform: translateX(-50%);
   border: 7px solid transparent;
-  border-top-color: var(--abyss-navy);
+  border-top-color: var(--ocean-blue);
 }
 .map-marker:hover .map-tooltip,
 .map-marker:focus-visible .map-tooltip {
@@ -1295,6 +1310,21 @@ footer.site-footer p {
 .map-marker.edge-right:hover .map-tooltip, .map-marker.edge-right:focus-visible .map-tooltip {
   transform: translate(0, 0);
 }
+.map-marker.tooltip-below .map-tooltip {
+  top: calc(100% + 12px);
+  bottom: auto;
+  transform: translate(-50%, -4px);
+}
+.map-marker.tooltip-below .map-tooltip::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--ocean-blue);
+}
+.map-marker.tooltip-below:hover .map-tooltip,
+.map-marker.tooltip-below:focus-visible .map-tooltip {
+  transform: translate(-50%, 0);
+}
 .map-caption {
   font-family: var(--mono);
   font-size: 11px;
@@ -1305,7 +1335,9 @@ footer.site-footer p {
 }
 @media (max-width: 720px) {
   .map-marker-label { display: none; }
-  .map-tooltip { min-width: 160px; max-width: 220px; font-size: 11px; padding: 10px 12px; }
+  .map-tooltip { width: 248px; font-size: 11px; padding: 12px 13px 13px; }
+  .map-tooltip-photo { width: calc(100% + 26px); margin: -12px -13px 11px; height: 88px; }
+  .map-tooltip-photo.photo-emblem { padding: 6px 18px; }
 }
 @media print { .expedition-map, .expedition-map-section { display: none; } }
 
