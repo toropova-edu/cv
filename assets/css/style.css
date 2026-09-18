@@ -1026,7 +1026,7 @@ footer.site-footer p {
 .expedition-map {
   position: relative;
   width: 100%;
-  aspect-ratio: 960 / 234;
+  aspect-ratio: 960 / 252;
   background: linear-gradient(180deg, 
     rgba(29, 111, 120, 0.08) 0%, 
     rgba(29, 111, 120, 0.04) 50%, 
@@ -1172,6 +1172,9 @@ footer.site-footer p {
   align-items: center;
   justify-content: center;
   z-index: 20;
+}
+.map-marker:hover, .map-marker:focus-visible {
+  z-index: 30;
 }
 .map-dot, .marker-dot {
   width: 12px; height: 12px;
