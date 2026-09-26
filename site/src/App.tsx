@@ -45,9 +45,11 @@ export default function App() {
   return (
     <div className="min-h-[100dvh] bg-black text-cream">
       {page && <Sea />}
-      <Chrome key={page ? 'page' : 'home'} route={route} overlay={!page} />
+      {/* Keys are namespaced: the home route is literally "home", and a bare 'home' on the chrome
+          collided with it — React then duplicated the header on every re-render (e.g. language switch). */}
+      <Chrome key={page ? 'chrome:page' : 'chrome:home'} route={route} overlay={!page} />
       {/* key re-mounts the page so its entrance plays on every navigation */}
-      <div key={route} data-lang-fade className="relative z-10">
+      <div key={`page:${route}`} data-lang-fade className="relative z-10">
         <Page />
       </div>
     </div>
