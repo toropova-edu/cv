@@ -71,7 +71,7 @@ function Timeline({ items }: { items: Entry[] }) {
               </p>
             )}
             {e.body.map((p) => (
-              <p key={p} className="mt-5 max-w-2xl text-base leading-relaxed text-cream/80 sm:text-[17px]">
+              <p key={p} className="mt-5 max-w-2xl text-base leading-relaxed text-cream/80 sm:text-[1.0625rem]">
                 {p}
               </p>
             ))}
@@ -119,7 +119,7 @@ export function About() {
 
       <section className="grid gap-12 px-6 pt-16 sm:grid-cols-12 sm:gap-10 sm:px-10 sm:pt-24">
         <Reveal className="sm:col-span-7">
-          <p className="font-hn text-[28px] leading-[1.15] tracking-[-0.02em] sm:text-[3.4vw]">{c.about.intro}</p>
+          <p className="font-hn text-[1.75rem] leading-[1.15] tracking-[-0.02em] sm:text-[3.4vw]">{c.about.intro}</p>
         </Reveal>
         <Reveal delay={120} className="sm:col-span-4 sm:col-start-9">
           <figure className="overflow-hidden">
@@ -197,7 +197,7 @@ export function About() {
             >
               <span className="text-xs tabular-nums text-cream/55 sm:col-span-1">{String(i + 1).padStart(2, '0')}</span>
               <h3 className="font-hn text-4xl leading-none tracking-[-0.035em] sm:col-span-5 sm:text-6xl">{h.title}</h3>
-              <p className="max-w-md text-base leading-relaxed text-cream/75 sm:col-span-6 sm:text-[17px]">{h.text}</p>
+              <p className="max-w-md text-base leading-relaxed text-cream/75 sm:col-span-6 sm:text-[1.0625rem]">{h.text}</p>
             </Reveal>
           ))}
         </ol>

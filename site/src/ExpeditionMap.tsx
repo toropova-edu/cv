@@ -8,8 +8,7 @@ import { MAP_H, MAP_W, graticule, land, pins, visited } from './map'
 const side: Record<string, 'left' | 'right' | 'top' | 'bottom'> = {
   'St Andrews': 'bottom',
   Kaliningrad: 'left',
-  "Kem'": 'left',
-  Solovki: 'top',
+  Solovki: 'left',
   Vladivostok: 'left',
 }
 
@@ -214,9 +213,9 @@ function Card({
         >
           <X size={16} strokeWidth={1.5} />
         </button>
-        <p className="pr-8 text-[11px] uppercase tracking-[0.2em] text-cream/50">{place.region}</p>
+        <p className="pr-8 text-[0.6875rem] uppercase tracking-[0.2em] text-cream/50">{place.region}</p>
         <h3 className="mt-2 font-hn text-2xl tracking-[-0.02em]">{place.name}</h3>
-        <p className="mt-1 text-[11px] tabular-nums text-cream/45">{place.coords}</p>
+        <p className="mt-1 text-[0.6875rem] tabular-nums text-cream/45">{place.coords}</p>
         <p className="mt-3 text-sm leading-relaxed text-cream/75">{place.text}</p>
       </div>
     </div>

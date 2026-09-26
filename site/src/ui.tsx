@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { X } from 'lucide-react'
 import { LangSwitch, useLang } from './lang'
 
 export const EASE = 'var(--ease-in-out)'
@@ -79,7 +78,7 @@ export function Disclosure({ label, children }: { label: string; children: React
         style={{ gridTemplateRows: open ? '1fr' : '0fr', opacity: open ? 1 : 0 }}
       >
         <div className="overflow-hidden">
-          <p className="max-w-xl pt-2 text-[15px] leading-relaxed text-cream/60">{children}</p>
+          <p className="max-w-xl pt-2 text-[0.9375rem] leading-relaxed text-cream/60">{children}</p>
         </div>
       </div>
     </div>
@@ -120,6 +119,13 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
   }, [overlay])
 
   useEffect(() => setOpen(false), [route])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
 
   const d = (ms: number) => ({ animationDelay: `${overlay ? ms : ms - 700}ms` })
   const active = (href: string) => href === `#/${route}`
@@ -204,17 +210,17 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
         className={`anim-fade-up ${pos} right-4 top-4 z-50 flex h-11 w-11 items-center justify-center sm:hidden`}
         style={d(900)}
       >
-        <span className="relative block h-4 w-6">
+        <span className="relative block h-[16px] w-[24px]">
           <span
-            className="absolute left-0 top-0 h-0.5 w-6 bg-cream transition-transform duration-300 ease-in-out"
+            className="absolute left-0 top-0 h-[2px] w-[24px] bg-cream transition-transform duration-300 ease-in-out"
             style={{ transform: open ? 'translateY(7px) rotate(45deg)' : 'none' }}
           />
           <span
-            className="absolute left-0 top-[7px] h-0.5 w-6 bg-cream transition-opacity duration-150"
+            className="absolute left-0 top-[7px] h-[2px] w-[24px] bg-cream transition-opacity duration-150"
             style={{ opacity: open ? 0 : 1 }}
           />
           <span
-            className="absolute bottom-0 left-0 h-0.5 w-6 bg-cream transition-transform duration-300 ease-in-out"
+            className="absolute bottom-0 left-0 h-[2px] w-[24px] bg-cream transition-transform duration-300 ease-in-out"
             style={{ transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' }}
           />
         </span>
@@ -233,20 +239,6 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
           }`}
           aria-hidden={!open}
         >
-          <button
-            type="button"
-            aria-label={c.ui.closeMenu}
-            onClick={() => setOpen(false)}
-            className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center transition-[opacity,transform] duration-300 ease-out"
-            style={{
-              opacity: open ? 1 : 0,
-              transform: `rotate(${open ? 0 : 90}deg)`,
-              transitionDelay: open ? '150ms' : '0ms',
-            }}
-          >
-            <X size={26} strokeWidth={1.5} />
-          </button>
-
           <Stagger open={open} delay={120} from="translate-y-6">
             <p className="mt-16 text-xs uppercase tracking-[0.2em] text-cream/50">{c.ui.siteIndex}</p>
           </Stagger>
@@ -394,7 +386,7 @@ function Depth() {
     }
   }, [])
   return (
-    <p className="mt-1 text-[11px] tabular-nums text-cream/45" aria-hidden>
+    <p className="mt-1 text-[0.6875rem] tabular-nums text-cream/45" aria-hidden>
       {c.ui.depth} <span ref={ref}>0000</span> {c.ui.metres}
     </p>
   )

@@ -9,6 +9,10 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
+/* Interface scale: everything in rem (type, spacing, tap targets) grows ~10%.
+   Display type (hero name, page titles) is sized in vw/vh and is not affected. */
+html { font-size: 110% }
+
 body {
   font-family: 'Helvetica Neue ME', Arimo, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
