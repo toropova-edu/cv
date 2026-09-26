@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { LangSwitch, useLang } from './lang'
 
-export const EASE = 'cubic-bezier(0.76, 0, 0.24, 1)'
+export const EASE = 'var(--ease-in-out)'
 export const external = (href: string) =>
   href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {}
 
@@ -13,10 +13,7 @@ export function useRoute() {
   const read = () => window.location.hash.replace(/^#\/?/, '') || 'home'
   const [route, setRoute] = useState(read)
   useEffect(() => {
-    const on = () => {
-      setRoute(read())
-      window.scrollTo(0, 0)
-    }
+    const on = () => setRoute(read())
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
@@ -72,18 +69,14 @@ export function Disclosure({ label, children }: { label: string; children: React
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="press group flex min-h-11 items-center gap-3 text-xs uppercase tracking-[0.2em] text-cream/55 transition-colors duration-300 hover:text-cream"
+        className="press group flex min-h-11 items-center gap-3 text-xs uppercase tracking-[0.2em] text-cream/55 hover:text-cream"
       >
         <Plus open={open} />
         {label}
       </button>
       <div
-        className="grid transition-[grid-template-rows,opacity] duration-500"
-        style={{
-          gridTemplateRows: open ? '1fr' : '0fr',
-          opacity: open ? 1 : 0,
-          transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
-        }}
+        className="grid transition-[grid-template-rows,opacity] duration-300 ease-drawer"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr', opacity: open ? 1 : 0 }}
       >
         <div className="overflow-hidden">
           <p className="max-w-xl pt-2 text-[15px] leading-relaxed text-cream/60">{children}</p>
@@ -96,7 +89,7 @@ export function Disclosure({ label, children }: { label: string; children: React
 function Plus({ open }: { open: boolean }) {
   return (
     <span
-      className="relative block h-3 w-3 shrink-0 transition-transform duration-500"
+      className="relative block h-3 w-3 shrink-0 transition-transform duration-300"
       style={{ transform: open ? 'rotate(45deg)' : 'none', transitionTimingFunction: EASE }}
     >
       <span className="absolute left-0 top-1/2 h-px w-3 -translate-y-1/2 bg-current" />
@@ -134,12 +127,12 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
 
   return (
     <>
-      <header className={`${pos} inset-x-0 top-0 z-30 flex items-start justify-between px-6 pb-5 pt-6 sm:px-10 sm:pt-8`}>
+      <header data-lang-fade className={`${pos} inset-x-0 top-0 z-30 flex items-start justify-between px-6 pb-5 pt-6 sm:px-10 sm:pt-8`}>
         {/* Translucent material that materialises once content scrolls underneath */}
         {!overlay && (
           <div
             aria-hidden
-            className="glass pointer-events-none absolute inset-0 -z-10 transition-opacity duration-500"
+            className="glass pointer-events-none absolute inset-0 -z-10 transition-opacity duration-300 ease-out"
             style={{ opacity: scrolled ? 1 : 0 }}
           />
         )}
@@ -161,18 +154,23 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
                 key={l.href}
                 href={l.href}
                 aria-current={active(l.href) ? 'page' : undefined}
-                className="anim-fade-up group flex items-center gap-2 transition-opacity duration-300 hover:opacity-60"
+                className="anim-fade-up group flex items-center transition-opacity duration-200 ease-out hover:opacity-60"
                 style={d(1000 + i * 80)}
               >
                 <span
-                  className="h-1 w-1 rounded-full bg-cream transition-all duration-500"
+                  aria-hidden
+                  className="mr-2 h-1 w-1 rounded-full bg-cream transition-[opacity,transform] duration-300 ease-out"
                   style={{
                     opacity: active(l.href) ? 1 : 0,
-                    marginLeft: active(l.href) ? 0 : -12,
-                    transitionTimingFunction: EASE,
+                    transform: active(l.href) ? 'none' : 'translateX(-6px) scale(0.5)',
                   }}
                 />
-                {l.label}
+                <span
+                  className="transition-transform duration-300 ease-out"
+                  style={{ transform: active(l.href) ? 'none' : 'translateX(-12px)' }}
+                >
+                  {l.label}
+                </span>
               </a>
             ))}
           </nav>
@@ -182,7 +180,7 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
                 key={l.href}
                 href={l.href}
                 {...external(l.href)}
-                className="anim-fade-up transition-opacity duration-300 hover:opacity-60"
+                className="anim-fade-up transition-opacity duration-200 ease-out hover:opacity-60"
                 style={d(1150 + i * 80)}
               >
                 {l.label}
@@ -208,16 +206,16 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
       >
         <span className="relative block h-4 w-6">
           <span
-            className="absolute left-0 top-0 h-0.5 w-6 bg-cream transition-transform duration-500"
-            style={{ transitionTimingFunction: EASE, transform: open ? 'translateY(7px) rotate(45deg)' : 'none' }}
+            className="absolute left-0 top-0 h-0.5 w-6 bg-cream transition-transform duration-300 ease-in-out"
+            style={{ transform: open ? 'translateY(7px) rotate(45deg)' : 'none' }}
           />
           <span
-            className="absolute left-0 top-[7px] h-0.5 w-6 bg-cream transition-opacity duration-300"
+            className="absolute left-0 top-[7px] h-0.5 w-6 bg-cream transition-opacity duration-150"
             style={{ opacity: open ? 0 : 1 }}
           />
           <span
-            className="absolute bottom-0 left-0 h-0.5 w-6 bg-cream transition-transform duration-500"
-            style={{ transitionTimingFunction: EASE, transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' }}
+            className="absolute bottom-0 left-0 h-0.5 w-6 bg-cream transition-transform duration-300 ease-in-out"
+            style={{ transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' }}
           />
         </span>
       </button>
@@ -225,37 +223,36 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
       <div className="sm:hidden">
         <div
           onClick={() => setOpen(false)}
-          className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${
-            open ? 'opacity-100' : 'pointer-events-none opacity-0'
+          className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity ease-out ${
+            open ? 'opacity-100 duration-300' : 'pointer-events-none opacity-0 duration-200'
           }`}
         />
         <aside
-          className={`fixed inset-y-0 right-0 z-40 w-[80%] max-w-sm bg-[#141414] px-8 py-10 text-cream transition-transform duration-[600ms] ${
-            open ? 'translate-x-0' : 'invisible translate-x-full'
+          className={`fixed inset-y-0 right-0 z-40 w-[80%] max-w-sm bg-[#141414] px-8 py-10 text-cream transition-[transform,opacity,visibility] ease-drawer motion-reduce:translate-x-0 ${
+            open ? 'translate-x-0 duration-500' : 'invisible translate-x-full duration-300 motion-reduce:opacity-0'
           }`}
-          style={{ transitionTimingFunction: EASE, transitionProperty: 'transform, visibility' }}
           aria-hidden={!open}
         >
           <button
             type="button"
             aria-label={c.ui.closeMenu}
             onClick={() => setOpen(false)}
-            className="absolute right-6 top-6 transition-all duration-500"
+            className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center transition-[opacity,transform] duration-300 ease-out"
             style={{
               opacity: open ? 1 : 0,
               transform: `rotate(${open ? 0 : 90}deg)`,
-              transitionDelay: open ? '300ms' : '0ms',
+              transitionDelay: open ? '150ms' : '0ms',
             }}
           >
             <X size={26} strokeWidth={1.5} />
           </button>
 
-          <Stagger open={open} delay={250} from="translate-y-6">
+          <Stagger open={open} delay={120} from="translate-y-6">
             <p className="mt-16 text-xs uppercase tracking-[0.2em] text-cream/50">{c.ui.siteIndex}</p>
           </Stagger>
           <nav className="mt-4 flex flex-col gap-2">
             {c.nav.map((l, i) => (
-              <Stagger key={l.href} open={open} delay={300 + i * 80} from="translate-y-6">
+              <Stagger key={l.href} open={open} delay={160 + i * 50} from="translate-y-6">
                 <a href={l.href} className={`text-4xl tracking-[-0.02em] ${active(l.href) ? '' : 'text-cream/60'}`}>
                   {l.label}
                 </a>
@@ -263,12 +260,12 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
             ))}
           </nav>
 
-          <Stagger open={open} delay={500} from="translate-y-4">
+          <Stagger open={open} delay={300} from="translate-y-4">
             <p className="mt-14 text-xs uppercase tracking-[0.2em] text-cream/50">{c.ui.findMe}</p>
           </Stagger>
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {c.social.map((l, i) => (
-              <Stagger key={l.href} open={open} delay={550 + i * 60} from="translate-y-4">
+              <Stagger key={l.href} open={open} delay={330 + i * 40} from="translate-y-4">
                 <a href={l.href} {...external(l.href)} className="inline-flex min-h-11 items-center">
                   {l.label}
                 </a>
@@ -276,7 +273,7 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
             ))}
           </div>
 
-          <Stagger open={open} delay={650} from="translate-y-4">
+          <Stagger open={open} delay={440} from="translate-y-4">
             <p className="mt-10 text-xs uppercase tracking-[0.2em] text-cream/50">{c.ui.language}</p>
             <LangSwitch className="mt-2 text-2xl [&_button]:min-h-11" />
           </Stagger>
@@ -289,11 +286,10 @@ export function Chrome({ route, overlay = false }: { route: string; overlay?: bo
 function Stagger({ open, delay, from, children }: { open: boolean; delay: number; from: string; children: ReactNode }) {
   return (
     <div
-      className={`transition-all duration-700 ${open ? 'translate-y-0 opacity-100' : `${from} opacity-0`}`}
-      style={{
-        transitionDelay: open ? `${delay}ms` : '0ms',
-        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
-      }}
+      className={`transition-[opacity,transform] ease-out motion-reduce:translate-y-0 ${
+        open ? 'translate-y-0 opacity-100 duration-500' : `${from} opacity-0 duration-150`
+      }`}
+      style={{ transitionDelay: open ? `${delay}ms` : '0ms' }}
     >
       {children}
     </div>
@@ -326,7 +322,6 @@ export function PageHero({
         <span className="shrink-0">{index}</span>
       </div>
       <h1
-        key={title}
         className="anim-fade-up mt-6 font-hn text-[min(17vw,var(--fit))] leading-[0.88] tracking-[-0.045em] sm:text-[min(13vw,var(--fit))]"
         style={{ animationDelay: '250ms', ['--fit' as string]: fit }}
       >
@@ -355,14 +350,12 @@ export function NextPage({ label, href }: { label: string; href: string }) {
       <Label>{c.ui.next}</Label>
       <div className="mt-4 flex items-end justify-between gap-6 border-t-2 border-cream pt-6">
         <span
-          className="font-hn text-[12vw] leading-[0.9] tracking-[-0.04em] transition-transform duration-700 group-hover:translate-x-3 sm:text-[9vw]"
-          style={{ transitionTimingFunction: EASE }}
+          className="font-hn text-[12vw] leading-[0.9] tracking-[-0.04em] transition-transform duration-300 ease-out group-hover:translate-x-3 group-active:translate-x-1 sm:text-[9vw]"
         >
           {label}
         </span>
         <span
-          className="mb-[2vw] text-3xl transition-transform duration-700 group-hover:translate-x-2 sm:text-5xl"
-          style={{ transitionTimingFunction: EASE }}
+          className="mb-[2vw] text-3xl transition-transform duration-300 ease-out group-hover:translate-x-2 sm:text-5xl"
         >
           →
         </span>
@@ -452,7 +445,8 @@ export function Sea() {
     const t0 = lastT
     const frame = (now: number) => {
       const dt = Math.max(1, now - lastT)
-      const v = Math.abs(window.scrollY - lastY) / dt // px per ms
+      const dy = Math.abs(window.scrollY - lastY)
+      const v = dy > 400 ? 0 : dy / dt // px per ms; bigger single-frame jumps are teleports, not scrolling
       lastY = window.scrollY
       lastT = now
       // rise quickly with scroll speed, decay smoothly — never a hard cut

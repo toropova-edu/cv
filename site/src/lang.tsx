@@ -47,7 +47,7 @@ export function LangSwitch({ className = '' }: { className?: string }) {
             lang={l}
             aria-pressed={lang === l}
             onClick={() => setLang(l)}
-            className={`press uppercase transition-opacity duration-300 ${lang === l ? 'opacity-100' : 'opacity-45 hover:opacity-80'}`}
+            className={`press uppercase ${lang === l ? 'opacity-100' : 'opacity-45 hover:opacity-80'}`}
           >
             {l}
           </button>

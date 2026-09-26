@@ -8,7 +8,9 @@ export function Home() {
   const { c } = useLang()
   return (
     <section className="relative h-[100dvh] w-full overflow-hidden bg-black">
-      {/* Rack focus: the sharp frame arrives first, then the background falls out of focus behind Sasha */}
+      {/* Rack focus: the sharp frame arrives first, then the background falls out of focus behind Sasha.
+          The cut-out fades in with the sharp frame, pixel-aligned and on the same curve, so there is never
+          a seam or a doubled Sasha; only the plate behind her changes. */}
       <img src="assets/images/hero/bg.jpg" alt="" className="anim-fade-in absolute inset-0 h-full w-full object-cover" />
       <img src="assets/images/hero/bg-blur.jpg" alt="" className="anim-focus absolute inset-0 h-full w-full object-cover" />
       <div className="anim-fade-in pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/70" />
@@ -33,8 +35,7 @@ export function Home() {
       <img
         src="assets/images/hero/portrait.png"
         alt={c.ui.portraitAlt}
-        className="anim-rise-in pointer-events-none absolute inset-0 z-20 h-full w-full object-cover"
-        style={{ animationDelay: '300ms' }}
+        className="anim-fade-in pointer-events-none absolute inset-0 z-20 h-full w-full object-cover"
       />
 
       <footer className="absolute inset-x-0 bottom-0 z-30 flex items-end justify-between px-6 pb-5 font-hn text-xs leading-relaxed sm:z-10 sm:px-10 sm:pb-8 sm:text-sm">
@@ -125,7 +126,7 @@ export function About() {
             <img
               src="assets/images/expedition_photo1.jpg"
               alt={c.about.photoAlt}
-              className="aspect-[4/5] w-full object-cover grayscale transition-[filter] duration-700 hover:grayscale-0"
+              className="aspect-[4/5] w-full object-cover grayscale transition-[filter] duration-500 ease-out hover:grayscale-0"
             />
             <figcaption className="mt-3 text-xs text-cream/55">{c.about.photoCaption}</figcaption>
           </figure>
@@ -139,7 +140,7 @@ export function About() {
               <dt className="text-sm text-cream/55">{f.k}</dt>
               <dd className="text-right text-sm sm:text-base">
                 {f.href ? (
-                  <a href={f.href} {...external(f.href)} className="transition-opacity duration-300 hover:opacity-60">
+                  <a href={f.href} {...external(f.href)} className="transition-opacity duration-200 ease-out hover:opacity-60">
                     {f.v}
                   </a>
                 ) : (
@@ -257,8 +258,7 @@ export function Experience() {
                   src={g.src}
                   alt={g.title}
                   loading="lazy"
-                  className="aspect-[3/4] w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.03]"
-                  style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+                  className="aspect-[3/4] w-full object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
                 />
               </div>
               <figcaption className="mt-3">

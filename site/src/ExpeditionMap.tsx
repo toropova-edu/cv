@@ -25,7 +25,14 @@ export function ExpeditionMap() {
   const [sel, setSel] = useState<string | null>(null)
   const box = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
-  const place = c.places.find((p) => p.id === sel)
+  const [shownId, setShownId] = useState<string | null>(null)
+  const leaving = sel === null && shownId !== null
+  useEffect(() => {
+    if (sel) return setShownId(sel)
+    const t = setTimeout(() => setShownId(null), 150)
+    return () => clearTimeout(t)
+  }, [sel])
+  const place = c.places.find((p) => p.id === (sel ?? shownId))
 
   useEffect(() => {
     if (!sel) return
@@ -86,12 +93,13 @@ export function ExpeditionMap() {
                 <span className="relative block h-2 w-2">
                   <span className="sonar absolute inset-0 rounded-full border border-cream" style={{ animationDelay: `${i * 0.37}s` }} />
                   <span
-                    className="absolute inset-0 rounded-full bg-cream transition-transform duration-300 group-active:scale-75"
-                    style={{ transform: active ? 'scale(1.6)' : undefined }}
+                    className={`absolute inset-0 rounded-full bg-cream transition-transform duration-200 ease-out group-active:scale-75 ${
+                      active ? 'scale-[1.6]' : ''
+                    }`}
                   />
                 </span>
                 <span
-                  className={`pointer-events-none absolute whitespace-nowrap text-xs tracking-wide transition-opacity duration-300 ${
+                  className={`pointer-events-none absolute whitespace-nowrap text-xs tracking-wide transition-opacity duration-200 ease-out ${
                     active ? 'opacity-100' : 'opacity-65 group-hover:opacity-100'
                   } ${labelPos[side[p.id] ?? 'right']}`}
                 >
@@ -103,7 +111,7 @@ export function ExpeditionMap() {
 
           {place && (
             <div className="pointer-events-none absolute inset-0 z-30 hidden sm:block">
-              <Card key={place.id} place={place} onClose={() => setSel(null)} anchored />
+              <Card key={place.id} place={place} onClose={() => setSel(null)} leaving={leaving} anchored />
             </div>
           )}
         </div>
@@ -118,7 +126,7 @@ export function ExpeditionMap() {
       <div className="sm:hidden" aria-live="polite">
         {place && (
           <div className="mt-4">
-            <Card key={place.id} place={place} onClose={() => setSel(null)} />
+            <Card key={place.id} place={place} onClose={() => setSel(null)} leaving={leaving} />
           </div>
         )}
       </div>
@@ -131,12 +139,12 @@ export function ExpeditionMap() {
                 type="button"
                 aria-pressed={sel === p.id}
                 onClick={() => choose(p.id)}
-                className={`press flex min-h-12 w-full items-center gap-2 text-left text-sm transition-opacity ${
+                className={`press flex min-h-12 w-full items-center gap-2 text-left text-sm ${
                   sel === p.id ? '' : 'opacity-70'
                 }`}
               >
                 <span
-                  className={`h-1.5 w-1.5 shrink-0 rounded-full bg-cream transition-opacity ${sel === p.id ? 'opacity-100' : 'opacity-30'}`}
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full bg-cream transition-opacity duration-200 ease-out ${sel === p.id ? 'opacity-100' : 'opacity-30'}`}
                 />
                 {p.name}
               </button>
@@ -148,7 +156,17 @@ export function ExpeditionMap() {
   )
 }
 
-function Card({ place, onClose, anchored = false }: { place: Place; onClose: () => void; anchored?: boolean }) {
+function Card({
+  place,
+  onClose,
+  leaving,
+  anchored = false,
+}: {
+  place: Place
+  onClose: () => void
+  leaving: boolean
+  anchored?: boolean
+}) {
   const { c } = useLang()
   let style: React.CSSProperties = {}
   const W = 400
@@ -174,7 +192,7 @@ function Card({ place, onClose, anchored = false }: { place: Place; onClose: () 
       role="dialog"
       aria-label={place.name}
       style={style}
-      className={`anim-pop pointer-events-auto overflow-hidden border border-cream/10 bg-[#141414]/85 shadow-2xl shadow-black/60 backdrop-blur-xl ${
+      className={`${leaving ? 'anim-pop-out pointer-events-none' : 'anim-pop pointer-events-auto'} overflow-hidden border border-cream/10 bg-[#141414]/85 shadow-2xl shadow-black/60 backdrop-blur-xl ${
         anchored ? 'flex' : ''
       }`}
     >
@@ -182,7 +200,7 @@ function Card({ place, onClose, anchored = false }: { place: Place; onClose: () 
         <img
           src={place.img}
           alt={place.name}
-          className={`object-cover grayscale transition-[filter] duration-700 hover:grayscale-0 ${
+          className={`object-cover grayscale transition-[filter] duration-500 ease-out hover:grayscale-0 ${
             anchored ? 'w-36 shrink-0 self-stretch' : 'aspect-[16/9] w-full'
           }`}
         />

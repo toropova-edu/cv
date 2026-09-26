@@ -2,44 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Motion tokens — the same curves as `ease-out` / `ease-in-out` / `ease-drawer` in tailwind.config.js */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 body {
   font-family: 'Helvetica Neue ME', Arimo, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
-@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(4vh) scale(1.03) }
-  to { opacity: 1; transform: translateY(0) scale(1) }
-}
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(28px) }
-  to { opacity: 1; transform: translateY(0) }
-}
-@keyframes line { from { transform: scaleX(0) } to { transform: scaleX(1) } }
-@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+/* ---------- Entrances ----------
+   fill-mode is `backwards`, not `both`: the element holds its first frame during the delay,
+   then hands control back to its own styles. With `both` the finished animation kept overriding
+   opacity forever, which silently killed every hover:opacity on the chrome. */
+@keyframes fade-in { from { opacity: 0 } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(24px) } }
+@keyframes line { from { transform: scaleX(0) } }
+@keyframes marquee { to { transform: translateX(-50%) } }
 
-.anim-fade-in { animation: fade-in 1.2s ease-out both }
-.anim-rise-in { animation: rise-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both }
-.anim-fade-up { animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both }
-.anim-line { transform-origin: left; animation: line 1.1s cubic-bezier(0.76, 0, 0.24, 1) both }
+.anim-fade-in { animation: fade-in 1.2s var(--ease-out) backwards }
+.anim-fade-up { animation: fade-up 0.8s var(--ease-out) backwards }
+.anim-line { transform-origin: left; animation: line 1s var(--ease-in-out) backwards }
 .marquee { animation: marquee 30s linear infinite }
 
-@media (prefers-reduced-motion: reduce) {
-  .anim-fade-in, .anim-rise-in, .anim-fade-up, .anim-line {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-  }
-}
-
-/* Rack focus: blurred plate fades over the sharp one */
-.anim-focus { animation: fade-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both }
+/* Rack focus: the blurred plate fades over the sharp one while Sasha stays sharp on top */
+.anim-focus { animation: fade-in 1.6s var(--ease-out) 0.9s backwards }
 
 /* Scroll reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
 }
 .reveal.is-in { opacity: 1; transform: none }
 
@@ -52,38 +49,29 @@ body {
   mask-image: linear-gradient(to bottom, #000 70%, transparent);
 }
 
-/* Instant feedback on press */
-.press { transition: transform 100ms ease-out }
-.press:active { transform: scale(0.97) }
-
-@media (prefers-reduced-motion: reduce) {
-  .anim-focus { animation-duration: 0.01ms !important; animation-delay: 0ms !important }
-  .reveal { transform: none; transition: opacity 0.2s ease }
-  .marquee { animation-duration: 90s }
+/* Instant feedback on press. Lives in the components layer so it carries its own transition list
+   (transform + opacity + color) instead of fighting utility transition classes. */
+@layer components {
+  .press {
+    transition-property: transform, opacity, color;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out);
+  }
+  .press:active { transform: scale(0.97) }
 }
-@media (prefers-reduced-transparency: reduce) {
-  .glass { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none }
-}
-
 
 /* Sonar ping on map pins */
 @keyframes sonar {
   0% { transform: scale(1); opacity: 0.7 }
   100% { transform: scale(3.6); opacity: 0 }
 }
-.sonar { animation: sonar 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite }
+.sonar { animation: sonar 2.8s var(--ease-out) infinite }
 
-/* Popover materialises: blur + scale + opacity together, grown from its pin */
-@keyframes pop {
-  from { opacity: 0; transform: scale(0.94); filter: blur(6px) }
-  to { opacity: 1; transform: none; filter: none }
-}
-.anim-pop { animation: pop 0.45s cubic-bezier(0.32, 0.72, 0, 1) both }
-
-@media (prefers-reduced-motion: reduce) {
-  .sonar { animation: none }
-  .anim-pop { animation: fade-in 0.2s ease both }
-}
+/* Map card: grows out of its pin (blur + scale + opacity together), leaves faster than it came */
+@keyframes pop { from { opacity: 0; transform: scale(0.96); filter: blur(4px) } }
+@keyframes pop-out { to { opacity: 0; transform: scale(0.98) } }
+.anim-pop { animation: pop 0.26s var(--ease-out) backwards }
+.anim-pop-out { animation: pop-out 0.15s var(--ease-out) forwards }
 
 /* Phone: the chart fades at its edges, hinting that it pans sideways */
 @media (max-width: 639px) {
@@ -91,4 +79,23 @@ body {
     -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 44px), transparent);
     mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 44px), transparent);
   }
+}
+
+/* ---------- Reduced motion: gentler, not frozen ----------
+   Movement goes away; opacity fades stay so things still arrive instead of popping. */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up,
+  .anim-line { animation-name: fade-in; animation-duration: 0.5s }
+  .anim-fade-in { animation-duration: 0.6s }
+  .anim-focus { animation-duration: 0.9s; animation-delay: 0.3s }
+  .reveal { transform: none; transition: opacity 0.4s var(--ease-out) }
+  .marquee { animation-duration: 90s }
+  .sonar { animation: none }
+  .anim-pop { animation: fade-in 0.2s var(--ease-out) backwards }
+  .anim-pop-out { animation: pop-out 0.12s linear forwards; transform: none }
+  .press:active { transform: none; opacity: 0.7 }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none }
 }
