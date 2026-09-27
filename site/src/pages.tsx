@@ -1,6 +1,7 @@
 import type { Entry } from './data'
 import { ExpeditionMap } from './ExpeditionMap'
 import { useLang } from './lang'
+import { WhalePass } from './Whales'
 import { Disclosure, Footer, Label, NextPage, PageHero, Reveal, external } from './ui'
 
 /* ================= Home ================= */
@@ -55,10 +56,10 @@ export function Home() {
 }
 
 /* ================= Shared timeline ================= */
-function Timeline({ items }: { items: Entry[] }) {
+function Timeline({ items, after }: { items: Entry[]; after?: Record<number, React.ReactNode> }) {
   return (
     <ol>
-      {items.map((e, idx) => (
+      {items.map((e, idx) => [
         <Reveal as="li" key={idx} className="grid gap-4 border-t border-cream/15 py-10 sm:grid-cols-12 sm:gap-10 sm:py-14">
           <p className="text-sm text-cream/55 sm:col-span-3">{e.date}</p>
           <div className="sm:col-span-9">
@@ -93,8 +94,13 @@ function Timeline({ items }: { items: Entry[] }) {
             )}
             {e.note && <Disclosure label={e.note.label}>{e.note.text}</Disclosure>}
           </div>
-        </Reveal>
-      ))}
+        </Reveal>,
+        after?.[idx] && (
+          <li key={`after-${idx}`} aria-hidden>
+            {after[idx]}
+          </li>
+        ),
+      ])}
     </ol>
   )
 }
@@ -238,7 +244,7 @@ export function Experience() {
       </Section>
 
       <Section label={c.sections.expeditions}>
-        <Timeline items={c.expeditions} />
+        <Timeline items={c.expeditions} after={{ 1: <WhalePass /> }} />
       </Section>
 
       <Section label={c.sections.work}>

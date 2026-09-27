@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { LangSwitch, useLang } from './lang'
+import { DeepWhale } from './Whales'
 
 export const EASE = 'var(--ease-in-out)'
 export const external = (href: string) =>
@@ -454,6 +455,7 @@ export function Sea() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="absolute inset-x-0 bottom-0 h-[55vh] bg-gradient-to-t from-[#4fb3c2]/[0.08] to-transparent" />
+      <DeepWhale />
       <svg viewBox={`0 0 ${W} 100`} preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 h-[36vh] w-full">
         {layers.map((l, i) => (
           <g key={i}>

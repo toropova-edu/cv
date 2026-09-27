@@ -89,6 +89,8 @@ const en = {
     mapSwipe: 'swipe the chart sideways',
     mapLabel: 'Expedition map — scroll sideways',
     mapList: 'All places',
+    whaleLatin: 'Delphinapterus leucas',
+    whalePlace: 'Beluga · Solovki, 2025',
   },
   nav: [
     { label: 'About', href: '#/about' },
@@ -304,6 +306,8 @@ const ru: Content = {
     mapSwipe: 'карту можно листать вбок',
     mapLabel: 'Карта экспедиций — листается вбок',
     mapList: 'Все места',
+    whaleLatin: 'Delphinapterus leucas',
+    whalePlace: 'Белуха · Соловки, 2025',
   },
   nav: [
     { label: 'Обо мне', href: '#/about' },

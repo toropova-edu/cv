@@ -8,17 +8,19 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "prebuild": "node -e \"const fs=require('fs');for(const f of fs.readdirSync('../assets'))if(/^index-.*\\.(js|css)$/.test(f))fs.rmSync('../assets/'+f)\""
+    "prebuild": "node -e \"const fs=require('fs');for(const f of fs.readdirSync('../assets'))if(/\\.(js|css)$/.test(f))fs.rmSync('../assets/'+f)\""
   },
   "dependencies": {
     "lucide-react": "^1.48.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "three": "^0.170.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.6.1",
     "oxlint": "^1.81.0",
