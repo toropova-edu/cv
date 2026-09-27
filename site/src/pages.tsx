@@ -96,7 +96,7 @@ function Timeline({ items, after }: { items: Entry[]; after?: Record<number, Rea
           </div>
         </Reveal>,
         after?.[idx] && (
-          <li key={`after-${idx}`} aria-hidden>
+          <li key={`after-${idx}`}>
             {after[idx]}
           </li>
         ),
@@ -244,7 +244,14 @@ export function Experience() {
       </Section>
 
       <Section label={c.sections.expeditions}>
-        <Timeline items={c.expeditions} after={{ 1: <WhalePass /> }} />
+        <Timeline
+          items={c.expeditions}
+          after={{
+            0: <WhalePass species="porpoise" />,
+            1: <WhalePass species="beluga" />,
+            2: <WhalePass species="minke" />,
+          }}
+        />
       </Section>
 
       <Section label={c.sections.work}>

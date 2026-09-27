@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Frame, WhaleView } from './whale'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
+import type { Frame, Species, WhaleView } from './whale'
 import { useLang } from './lang'
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -9,9 +10,32 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 const DEPTH = 150
 const depthOf = () => window.scrollY / 6
 
-/* One whale on screen at a time: while the Solovki band is visible, the deep one steps back. */
+/* The deep one steps back while any encounter band is on screen, so it never doubles up with a close whale. */
 const PASS_EVENT = 'whalepass'
-const announcePass = (visible: boolean) => window.dispatchEvent(new CustomEvent(PASS_EVENT, { detail: visible }))
+const onScreen = new Set<string>()
+const announcePass = (id: string, visible: boolean) => {
+  if (visible) onScreen.add(id)
+  else onScreen.delete(id)
+  window.dispatchEvent(new CustomEvent(PASS_EVENT, { detail: onScreen.size > 0 }))
+}
+
+/**
+ * How each species moves through its band.
+ * size: relative to the beluga · base/boost: tail-beat rate at rest / extra while moving
+ * amp: tail amplitude · arc: rise and fall across the band · bob/bobRate: body heave while cruising
+ */
+const CHARACTER: Record<Species, { size: number; base: number; boost: number; amp: number; arc: number; bob: number; bobRate: number }> = {
+  beluga: { size: 1, base: 1.5, boost: 1.4, amp: 0.1, arc: 0.1, bob: 0.03, bobRate: 0.6 },
+  // long and unhurried: a slow, shallow beat and an almost level glide
+  minke: { size: 1.15, base: 1.1, boost: 1.0, amp: 0.07, arc: 0.06, bob: 0.02, bobRate: 0.4 },
+  // small and quick, rolling up and down as porpoises do
+  porpoise: { size: 0.72, base: 2.6, boost: 2.0, amp: 0.13, arc: 0.12, bob: 0.07, bobRate: 1.3 },
+}
+
+/** How far the arrows turn the animal: a little to the left, more to the right (degrees) */
+const TURN_LEFT = -25
+const TURN_RIGHT = 45
+const turnDeg = (step: number) => (step < 0 ? TURN_LEFT : step > 0 ? TURN_RIGHT : 0)
 
 /* ─────────────────────────── 1. The deep one ───────────────────────────
    Lives in the sea behind the inner pages. Past 150 m a faint beluga slides out of the dark,
@@ -109,15 +133,25 @@ export function DeepWhale() {
   )
 }
 
-/* ─────────────────────────── 2. The Solovki encounter ───────────────────────────
-   A band under the Solovki expedition. The beluga crosses it as you scroll past — position follows
-   the scroll (smoothed, so it glides rather than jerks), and the tail beats faster while it moves. */
-export function WhalePass() {
+/* ─────────────────────────── 2. Encounters ───────────────────────────
+   A band under an expedition. Its animal crosses as you scroll past — position follows the scroll
+   (smoothed, so it glides rather than jerks), and the tail beats faster while it moves. */
+export function WhalePass({ species }: { species: Species }) {
   const { c } = useLang()
+  const ch = CHARACTER[species]
+  const label = c.ui.species[species]
   const band = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const [load, setLoad] = useState(false)
   const [seen, setSeen] = useState(false)
+  // −1 · 0 · +1 → −25° · 0° · +45°; the engine springs toward it
+  const [turn, setTurn] = useState(0)
+  const turnRef = useRef(0)
+  const view = useRef<WhaleView | null>(null)
+  useEffect(() => {
+    turnRef.current = turn
+    view.current?.turnTo(turnDeg(turn))
+  }, [turn])
 
   // Load a screen and a half early; draw only while on screen
   useEffect(() => {
@@ -136,7 +170,7 @@ export function WhalePass() {
     const s = { x: NaN }
 
     const pose = ({ t, dt, whale, halfW, halfH, swim }: Frame) => {
-      const scale = Math.min(halfW * 0.5, halfH * 1.6)
+      const scale = Math.min(halfW * 0.5, halfH * 1.6) * ch.size
       whale.scale.setScalar(scale)
       const r = band.current!.getBoundingClientRect()
       const vh = window.innerHeight
@@ -147,48 +181,92 @@ export function WhalePass() {
       const prev = s.x
       s.x += (target - s.x) * (1 - Math.exp(-dt * 3.5)) // critically-damped follow
       const v = Math.abs(s.x - prev) / Math.max(dt, 1e-3)
-      swim.speed = calm ? 0.6 : 1.5 + clamp(v * 1.4, 0, 2.6)
-      swim.amp = calm ? 0.06 : 0.1
-      whale.position.set(s.x, Math.sin(p * Math.PI) * 0.1 * scale + Math.sin(t * 0.6) * 0.03 * scale, 0)
-      whale.rotation.set(Math.sin(t * 0.5) * 0.05, -0.22, calm ? 0 : -Math.cos(p * Math.PI) * 0.07)
+      swim.speed = calm ? ch.base * 0.4 : ch.base + clamp(v * ch.boost, 0, 2.6)
+      swim.amp = calm ? ch.amp * 0.6 : ch.amp
+      const heave = Math.sin(t * ch.bobRate) * ch.bob
+      whale.position.set(s.x, (Math.sin(p * Math.PI) * ch.arc + heave) * scale, 0)
+      // nose follows the heave, so a rise reads as swimming up rather than floating
+      const pitch = Math.cos(t * ch.bobRate) * ch.bob * ch.bobRate * 1.2
+      whale.rotation.set(Math.sin(t * 0.5) * 0.05, -0.22, calm ? 0 : -Math.cos(p * Math.PI) * 0.07 + pitch)
     }
 
     import('./whale').then(async ({ mountWhale }) => {
       if (!alive || !canvas.current || !band.current) return
-      const v = await mountWhale(canvas.current, 'near', pose)
+      const v = await mountWhale(canvas.current, 'near', pose, species)
       if (!alive) return v.dispose()
+      view.current = v
+      v.turnTo(turnDeg(turnRef.current))
       io = new IntersectionObserver(([e]) => {
-        announcePass(e.isIntersecting)
+        announcePass(species, e.isIntersecting)
         if (e.isIntersecting) {
           setSeen(true)
           v.start()
         } else v.stop()
       })
       io.observe(band.current)
-      cleanup = () => v.dispose()
+      cleanup = () => {
+        view.current = null
+        v.dispose()
+      }
     })
     let cleanup = () => {}
     return () => {
       alive = false
       io?.disconnect()
-      announcePass(false)
+      announcePass(species, false)
       cleanup()
     }
-  }, [load])
+  }, [load, species, ch])
 
   return (
     // Full-bleed so the whale can swim in from the very edge; the rule stays on the text grid
-    <div ref={band} aria-hidden className="relative -mx-6 sm:-mx-10">
-      <div className="absolute inset-x-6 top-0 h-px bg-cream/15 sm:inset-x-10" />
+    <div ref={band} className="relative -mx-6 sm:-mx-10">
+      <div aria-hidden className="absolute inset-x-6 top-0 h-px bg-cream/15 sm:inset-x-10" />
       <canvas
         ref={canvas}
+        aria-hidden
         className="block h-[clamp(240px,42vh,440px)] w-full transition-opacity duration-1000 ease-out"
         style={{ opacity: seen ? 1 : 0 }}
       />
-      <div className="pointer-events-none absolute inset-x-6 bottom-4 flex justify-between gap-6 text-xs text-cream/45 sm:inset-x-10">
-        <span>{c.ui.whaleLatin}</span>
-        <span>{c.ui.whalePlace}</span>
+      <div className="absolute inset-x-6 bottom-3 flex items-end justify-between gap-4 sm:inset-x-10">
+        <p className="flex flex-col gap-0.5 pb-2 text-xs text-cream/45">
+          <span className="italic">{label.latin}</span>
+          <span>{label.caption}</span>
+        </p>
+        <div className="flex shrink-0 items-center" role="group" aria-label={label.caption}>
+          <TurnButton label={c.ui.turnLeft} disabled={turn <= -1} onClick={() => setTurn((v) => Math.max(-1, v - 1))}>
+            <ArrowLeft size={18} strokeWidth={1.5} />
+          </TurnButton>
+          <TurnButton label={c.ui.turnRight} disabled={turn >= 1} onClick={() => setTurn((v) => Math.min(1, v + 1))}>
+            <ArrowRight size={18} strokeWidth={1.5} />
+          </TurnButton>
+        </div>
       </div>
     </div>
+  )
+}
+
+function TurnButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    // aria-disabled rather than disabled: at the limit the button keeps keyboard focus instead of dropping it
+    <button
+      type="button"
+      aria-label={label}
+      aria-disabled={disabled}
+      onClick={disabled ? undefined : onClick}
+      className="press flex h-11 w-11 items-center justify-center text-cream/70 transition-opacity hover:text-cream aria-disabled:cursor-default aria-disabled:opacity-25"
+    >
+      {children}
+    </button>
   )
 }

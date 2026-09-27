@@ -89,8 +89,13 @@ const en = {
     mapSwipe: 'swipe the chart sideways',
     mapLabel: 'Expedition map — scroll sideways',
     mapList: 'All places',
-    whaleLatin: 'Delphinapterus leucas',
-    whalePlace: 'Beluga · Solovki, 2025',
+    turnLeft: 'Turn left',
+    turnRight: 'Turn right',
+    species: {
+      beluga: { latin: 'Delphinapterus leucas', caption: 'Beluga · Solovki, 2025' },
+      minke: { latin: 'Balaenoptera acutorostrata', caption: 'Minke whale · Keldysh, 2024' },
+      porpoise: { latin: 'Phocoena phocoena', caption: 'Harbour porpoise · Anapa, 2026' },
+    },
   },
   nav: [
     { label: 'About', href: '#/about' },
@@ -306,8 +311,13 @@ const ru: Content = {
     mapSwipe: 'карту можно листать вбок',
     mapLabel: 'Карта экспедиций — листается вбок',
     mapList: 'Все места',
-    whaleLatin: 'Delphinapterus leucas',
-    whalePlace: 'Белуха · Соловки, 2025',
+    turnLeft: 'Повернуть влево',
+    turnRight: 'Повернуть вправо',
+    species: {
+      beluga: { latin: 'Delphinapterus leucas', caption: 'Белуха · Соловки, 2025' },
+      minke: { latin: 'Balaenoptera acutorostrata', caption: 'Малый полосатик · «Келдыш», 2024' },
+      porpoise: { latin: 'Phocoena phocoena', caption: 'Азовка · Анапа, 2026' },
+    },
   },
   nav: [
     { label: 'Обо мне', href: '#/about' },
