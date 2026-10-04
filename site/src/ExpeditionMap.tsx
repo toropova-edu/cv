@@ -3,14 +3,19 @@ import { X } from 'lucide-react'
 import type { Place } from './data'
 import { useLang } from './lang'
 import { MAP_H, MAP_W, graticule, land, pins, visited } from './map'
+import { RouteLegend, RouteSvg, SeaLabels } from './KeldyshRoute'
 
 // Which side of the dot the label sits on, so the crowded White Sea cluster stays readable
 const side: Record<string, 'left' | 'right' | 'top' | 'bottom'> = {
   'St Andrews': 'bottom',
-  Kaliningrad: 'left',
+  Kaliningrad: 'bottom',
   Solovki: 'left',
   Vladivostok: 'left',
+  Murmansk: 'top',
 }
+
+/** pins that belong to the Keldysh voyage — choosing one reveals the route */
+const ROUTE_PINS = new Set(['Kaliningrad', 'Novaya Zemlya', 'Murmansk'])
 
 const labelPos = {
   right: 'left-full top-1/2 -translate-y-1/2 -ml-2.5',
@@ -32,6 +37,10 @@ export function ExpeditionMap() {
     return () => clearTimeout(t)
   }, [sel])
   const place = c.places.find((p) => p.id === (sel ?? shownId))
+
+  // Keldysh route: drawn on request — the button below the map, or one of the voyage's pins
+  const [asked, setAsked] = useState(false)
+  const routeShown = asked || (sel !== null && ROUTE_PINS.has(sel))
 
   useEffect(() => {
     if (!sel) return
@@ -73,7 +82,9 @@ export function ExpeditionMap() {
             <path d={graticule} fill="none" stroke="#efeee9" strokeOpacity={0.09} strokeWidth={0.4} strokeDasharray="1.5 2.5" />
             <path d={land} fill="#efeee9" fillOpacity={0.06} stroke="#efeee9" strokeOpacity={0.16} strokeWidth={0.35} />
             <path d={visited} fill="#efeee9" fillOpacity={0.13} stroke="#efeee9" strokeOpacity={0.28} strokeWidth={0.35} />
+            <RouteSvg shown={routeShown} />
           </svg>
+          <SeaLabels shown={routeShown} />
 
           {c.places.map((p, i) => {
             const [x, y] = pins[p.id]
@@ -120,6 +131,18 @@ export function ExpeditionMap() {
         {sel ? c.ui.mapHintOpen : c.ui.mapHint}
         <span className="sm:hidden"> · {c.ui.mapSwipe}</span>
       </p>
+
+      <RouteLegend shown={routeShown} />
+      <button
+        type="button"
+        aria-pressed={asked}
+        onClick={() => setAsked((a) => !a)}
+        className="press mt-3 inline-flex min-h-11 items-center gap-3 text-xs uppercase tracking-[0.2em] text-cream/70 hover:text-cream"
+      >
+        <span className="h-px w-6 bg-current" />
+        {asked ? c.ui.route.hide : c.ui.route.show}
+      </button>
+
 
       {/* Phone: card sits under the chart, then a plain list with full-size tap targets */}
       <div className="sm:hidden" aria-live="polite">
@@ -174,7 +197,16 @@ function Card({
     const [x, y] = pins[place.id]
     const below = y < 50
     const h = x > 68 ? 'right' : x < 18 ? 'left' : 'center'
-    style = {
+    if (ROUTE_PINS.has(place.id)) {
+      // beside the pin, to the east: the route lies to the west and north of these three
+      style = {
+        position: 'absolute',
+        width: W,
+        left: `calc(${x}% + 18px)`,
+        ...(below ? { top: `calc(${y}% - 12px)` } : { bottom: `calc(${100 - y}% - 12px)` }),
+        transformOrigin: `0 ${below ? 'top' : 'bottom'}`,
+      }
+    } else style = {
       position: 'absolute',
       width: W,
       ...(below ? { top: `calc(${y}% + 16px)` } : { bottom: `calc(${100 - y}% + 16px)` }),
@@ -217,6 +249,16 @@ function Card({
         <h3 className="mt-2 font-hn text-2xl tracking-[-0.02em]">{place.name}</h3>
         <p className="mt-1 text-[0.6875rem] tabular-nums text-cream/45">{place.coords}</p>
         <p className="mt-3 text-sm leading-relaxed text-cream/75">{place.text}</p>
+        {place.credit && (
+          <a
+            href={place.credit.url}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 block text-[0.625rem] text-cream/40 transition-colors hover:text-cream/70"
+          >
+            {c.ui.photo}: {place.credit.by} · {place.credit.license}
+          </a>
+        )}
       </div>
     </div>
   )

@@ -13,7 +13,9 @@ export type Entry = {
 }
 
 /** `id` keys the map pin and stays the same in every language */
-export type Place = { id: string; name: string; coords: string; region: string; text: string; img?: string }
+/** Third-party photos need their author and licence shown next to them (CC BY-SA). */
+export type Credit = { by: string; license: string; url: string }
+export type Place = { id: string; name: string; coords: string; region: string; text: string; img?: string; credit?: Credit }
 
 const mail = 'alexandra.toropova2004@gmail.com'
 const tg = 'https://t.me/Sasha_Toropova'
@@ -26,6 +28,7 @@ const coords = {
   Arkhangelsk: '64.54° N · 40.54° E',
   Solovki: '65.02° N · 35.71° E',
   'Novaya Zemlya': '73.50° N · 55.00° E',
+  Murmansk: '68.97° N · 33.08° E',
   Anapa: '44.89° N · 37.32° E',
   Vladivostok: '43.12° N · 131.89° E',
 }
@@ -38,6 +41,20 @@ const imgs: Partial<Record<keyof typeof coords, string>> = {
   'Novaya Zemlya': 'assets/images/novayazelya.jpg',
   Anapa: 'assets/images/anapa.jpg',
   Vladivostok: 'assets/images/vladivostok.jpeg',
+  Murmansk: 'assets/images/murmansk.jpg',
+  'St Andrews': 'assets/images/standrews-harbour.jpg',
+}
+const credits: Partial<Record<keyof typeof coords, Credit>> = {
+  Murmansk: {
+    by: 'Separation51',
+    license: 'CC BY-SA 3.0',
+    url: 'https://commons.wikimedia.org/wiki/File:Murmansk_-_view_from_hills.jpg',
+  },
+  'St Andrews': {
+    by: 'Rob Farrow',
+    license: 'CC BY-SA 2.0',
+    url: 'https://commons.wikimedia.org/wiki/File:St_Andrews_-_Harbour_and_cathedral_ruins_-_geograph.org.uk_-_3125540.jpg',
+  },
 }
 const place = (id: keyof typeof coords, name: string, region: string, text: string): Place => ({
   id,
@@ -46,6 +63,7 @@ const place = (id: keyof typeof coords, name: string, region: string, text: stri
   text,
   coords: coords[id],
   img: imgs[id],
+  credit: credits[id],
 })
 
 const stAndrewsModules = {
@@ -89,7 +107,16 @@ const en = {
     mapSwipe: 'swipe the chart sideways',
     mapLabel: 'Expedition map — scroll sideways',
     mapList: 'All places',
+    photo: 'Photo',
     turnLeft: 'Turn left',
+    route: {
+      title: '95th voyage of R/V Akademik Mstislav Keldysh, 2024',
+      out: 'Kaliningrad → Novaya Zemlya',
+      back: 'return to Murmansk',
+      show: 'Show the Keldysh route',
+      hide: 'Hide the route',
+      seas: { baltic: 'Baltic Sea', norwegian: 'Norwegian Sea', barents: 'Barents Sea' },
+    },
     turnRight: 'Turn right',
     species: {
       beluga: { latin: 'Delphinapterus leucas', caption: 'Beluga · Solovki, 2025' },
@@ -279,6 +306,7 @@ const en = {
     place('Arkhangelsk', 'Arkhangelsk', 'White Sea', "Northern (Arctic) Federal University — bachelor's degree. Russia's largest Arctic university."),
     place('Solovki', 'Solovki', 'White Sea', 'Beluga whale expedition, 2025. A unique summer gathering site of White Sea belugas.'),
     place('Novaya Zemlya', 'Novaya Zemlya', 'Arctic', 'Observations on the 95th voyage of the Keldysh, between the Barents and Kara Seas — one of the least-studied corners of the Russian Arctic.'),
+    place('Murmansk', 'Murmansk', 'Barents Sea', 'End of the 95th voyage of R/V Akademik Mstislav Keldysh: back from Novaya Zemlya to the ice-free port on the Kola Bay.'),
     place('Anapa', 'Anapa', 'Black Sea', 'Expedition 2026: bottlenose dolphins, common dolphins and harbour porpoises in coastal waters.'),
     place('Vladivostok', 'Vladivostok', 'Pacific', "Maritime forum at Russia's largest Far East port and centre for Pacific marine research."),
   ],
@@ -311,7 +339,16 @@ const ru: Content = {
     mapSwipe: 'карту можно листать вбок',
     mapLabel: 'Карта экспедиций — листается вбок',
     mapList: 'Все места',
+    photo: 'Фото',
     turnLeft: 'Повернуть влево',
+    route: {
+      title: '95-й рейс НИС «Академик Мстислав Келдыш», 2024',
+      out: 'Калининград → Новая Земля',
+      back: 'возвращение в Мурманск',
+      show: 'Показать маршрут «Келдыша»',
+      hide: 'Скрыть маршрут',
+      seas: { baltic: 'Балтийское море', norwegian: 'Норвежское море', barents: 'Баренцево море' },
+    },
     turnRight: 'Повернуть вправо',
     species: {
       beluga: { latin: 'Delphinapterus leucas', caption: 'Белуха · Соловки, 2025' },
@@ -501,6 +538,7 @@ const ru: Content = {
     place('Arkhangelsk', 'Архангельск', 'Белое море', 'САФУ имени М.В. Ломоносова — бакалавриат. Крупнейший арктический вуз России.'),
     place('Solovki', 'Соловки', 'Белое море', 'Экспедиция к белухам, 2025. Уникальное место летнего скопления беломорской белухи.'),
     place('Novaya Zemlya', 'Новая Земля', 'Арктика', 'Наблюдения по маршруту 95-го рейса «Келдыша» между Баренцевым и Карским морями — один из самых малоизученных уголков российской Арктики.'),
+    place('Murmansk', 'Мурманск', 'Баренцево море', 'Конец 95-го рейса НИС «Академик Мстислав Келдыш»: возвращение от Новой Земли в незамерзающий порт на Кольском заливе.'),
     place('Anapa', 'Анапа', 'Чёрное море', 'Экспедиция 2026 года: афалины, белобочки и азовки в прибрежных водах.'),
     place('Vladivostok', 'Владивосток', 'Тихий океан', 'Морской форум в крупнейшем порту Дальнего Востока — центре тихоокеанских морских исследований.'),
   ],
