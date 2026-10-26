@@ -92,6 +92,19 @@ function Timeline({ items, after }: { items: Entry[]; after?: Record<number, Rea
                 ))}
               </div>
             )}
+            {e.photo && (
+              <figure className="mt-8 max-w-2xl">
+                <div className="overflow-hidden">
+                  <img
+                    src={e.photo.src}
+                    alt={e.photo.alt}
+                    loading="lazy"
+                    className="aspect-[3/2] w-full object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
+                  />
+                </div>
+                <figcaption className="mt-3 text-xs leading-relaxed text-cream/55">{e.photo.caption}</figcaption>
+              </figure>
+            )}
             {e.note && <Disclosure label={e.note.label}>{e.note.text}</Disclosure>}
           </div>
         </Reveal>,
