@@ -10,6 +10,7 @@ export type Entry = {
   note?: { label: string; text: string }
   role?: string
   modules?: { label: string; items: string[] }[]
+  photo?: { src: string; alt: string; caption: string }
 }
 
 /** `id` keys the map pin and stays the same in every language */
@@ -291,6 +292,11 @@ const en = {
       title: 'Poster presentation at MARESEDU-2025',
       org: 'XIV International Conference “Marine Research and Education”, P.P. Shirshov Institute of Oceanology RAS, Moscow',
       body: ['Presented and defended a poster at the annual multidisciplinary conference on oceanology, marine biology and marine mammals.'],
+      photo: {
+        src: 'assets/images/maresedu-2025.jpg',
+        alt: 'Sasha next to her poster at MARESEDU-2025',
+        caption: 'At the poster on socio-sexual interactions of beluga whales in the White Sea · MARESEDU-2025, Moscow',
+      },
     },
   ] as Entry[],
   gallery: [
@@ -523,6 +529,11 @@ const ru: Content = {
       title: 'Стендовый доклад на MARESEDU-2025',
       org: 'XIV Международная конференция «Морские исследования и образование», Институт океанологии им. П.П. Ширшова РАН, Москва',
       body: ['Представила и защитила постер на ежегодной междисциплинарной конференции по океанологии, морской биологии и морским млекопитающим.'],
+      photo: {
+        src: 'assets/images/maresedu-2025.jpg',
+        alt: 'Саша у своего постера на MARESEDU-2025',
+        caption: 'У постера о социо-половых взаимодействиях белух в Белом море · MARESEDU-2025, Москва',
+      },
     },
   ],
   gallery: [
